@@ -5,17 +5,22 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Portal ASA - Aksi Sosial Preventif Semarang Timur</title>
 
+    <!-- Favicon Link -->
+    <link rel="icon" type="image/png" href="https://github.com/ChocoToppy/PortalASA/blob/master/assets/images/favicon_ASA.png?raw=true">
+
     <!-- Open Graph / Facebook Meta Tags -->
     <meta property="og:title" content="Portal ASA – Aksi Sosial Preventif Semarang Timur">
     <meta property="og:description" content="Portal informasi, edukasi, dan direktori bantuan sosial di Kecamatan Semarang Timur.">
-    <meta property="og:image" content="https://chocotoppy.github.io/portal-asa/assets/preview.jpg">
-    <meta property="og:url" content="https://chocotoppy.github.io/portal-asa/">
+    <!-- Preview Image Link -->
+    <meta property="og:image" content="https://github.com/ChocoToppy/PortalASA/blob/master/assets/images/Preview.png?raw=true">
+    <!-- Update this URL once the custom domain is active -->
+    <meta property="og:url" content="https://chocotoppy.github.io/portal-asa/"> 
 
     <!-- Twitter Card Meta Tags -->
     <meta name="twitter:card" content="summary_large_image">
     
     <!-- Chosen Palette: Calm Harmony -->
-    <!-- Application Structure Plan: Single-page landing site. Flow: Hero -> Isu Sosial (Education) -> Langkah Pertama (Action Guidance) -> Materi Edukasi (Deeper Resources) -> Cari Bantuan (Contacts, now with website links) -> Lokasi Bantuan (Maps - Vertical) -> Tentang Proyek (Trust). -->
+    <!-- Application Structure Plan: Single-page landing site. Flow: Hero -> Isu Sosial (Education) -> Langkah Pertama (Action Guidance) -> Materi Edukasi (Deeper Resources) -> Cari Bantuan (Contacts, now with website links & consistent button widths) -> Lokasi Bantuan (Maps - Vertical) -> Tentang Proyek (Trust). Added site logo in header. -->
     <!-- Visualization & Content Choices: Text/Accordion for issues; Cards/Links for resources; Text/Lists for first steps; Buttons (copy + link) for contacts; Embedded iframes for maps; Links for sharing. -->
     <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
     <script src="https://cdn.tailwindcss.com"></script>
@@ -112,10 +117,18 @@
              border: 1px solid #3b82f6; /* Blue-500 */
              color: #3b82f6; /* Blue-500 */
              background-color: white;
+             display: inline-block; /* Needed for width */
+             text-align: center; /* Center text */
         }
          .website-button:hover {
             background-color: #eff6ff; /* Blue-50 */
          }
+         /* Ensure copy button uses full width too if needed */
+         .copy-button {
+             display: inline-block; /* Needed for width */
+             text-align: center; /* Center text */
+         }
+
     </style>
 </head>
 <body class="text-gray-800">
@@ -123,8 +136,10 @@
     <!-- Header / Navigation -->
     <header id="header" class="bg-white/80 backdrop-blur-lg fixed top-0 left-0 right-0 z-50 shadow-sm">
         <div class="container mx-auto px-6 py-4 flex justify-between items-center">
-            <a href="#hero" class="text-xl font-bold section-title">
-                Portal <span class="brand-color-main">ASA</span>
+             <!-- Updated Title with Logo -->
+            <a href="#hero" class="flex items-center text-xl font-bold section-title">
+                <img src="https://github.com/ChocoToppy/PortalASA/blob/master/assets/images/Logo_ASA.png?raw=true" alt="Logo Portal ASA" class="h-8 mr-2 object-contain"> <!-- Adjust h-8 if needed -->
+                Portal <span class="brand-color-main ml-1">ASA</span> <!-- Added ml-1 -->
             </a>
             <nav class="hidden md:flex space-x-6 lg:space-x-8">
                 <a href="#isu" class="text-gray-600 hover:text-blue-500 transition duration-300">Isu Sosial</a>
@@ -562,19 +577,23 @@
 
                 <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
                     <!-- Contact Card: JPPA -->
-                    <div class="bg-white p-6 rounded-lg shadow-lg text-center">
-                        <h3 class="font-bold text-lg section-title mb-2">JPPA (Jaringan Peduli Perempuan & Anak)</h3>
-                        <p class="text-gray-600 text-sm mb-4">Pendampingan korban kekerasan perempuan dan anak.</p>
-                        <button data-number="088228961516" class="copy-button brand-bg-main text-white font-semibold px-6 py-2 rounded-lg hover:bg-blue-600 transition duration-300 inline-block w-full sm:w-auto">
+                    <div class="bg-white p-6 rounded-lg shadow-lg text-center flex flex-col justify-between">
+                         <div>
+                            <h3 class="font-bold text-lg section-title mb-2">JPPA (Jaringan Peduli Perempuan & Anak)</h3>
+                            <p class="text-gray-600 text-sm mb-4">Pendampingan korban kekerasan perempuan dan anak.</p>
+                        </div>
+                        <button data-number="088228961516" class="copy-button brand-bg-main text-white font-semibold px-6 py-2 rounded-lg hover:bg-blue-600 transition duration-300 inline-block w-full sm:w-auto mt-auto">
                             Salin No - 088228961516
                         </button>
                     </div>
 
                     <!-- Contact Card: Garpu Perak -->
-                    <div class="bg-white p-6 rounded-lg shadow-lg text-center">
-                        <h3 class="font-bold text-lg section-title mb-2">Garpu Perak</h3>
-                        <p class="text-gray-600 text-sm mb-4">Bantuan hukum dan advokasi untuk masyarakat.</p>
-                        <button data-number="08562706408" class="copy-button brand-bg-main text-white font-semibold px-6 py-2 rounded-lg hover:bg-blue-600 transition duration-300 inline-block w-full sm:w-auto">
+                    <div class="bg-white p-6 rounded-lg shadow-lg text-center flex flex-col justify-between">
+                        <div>
+                            <h3 class="font-bold text-lg section-title mb-2">Garpu Perak</h3>
+                            <p class="text-gray-600 text-sm mb-4">Bantuan hukum dan advokasi untuk masyarakat.</p>
+                        </div>
+                        <button data-number="08562706408" class="copy-button brand-bg-main text-white font-semibold px-6 py-2 rounded-lg hover:bg-blue-600 transition duration-300 inline-block w-full sm:w-auto mt-auto">
                             Salin No - 08562706408
                         </button>
                     </div>
@@ -585,30 +604,34 @@
                             <h3 class="font-bold text-lg section-title mb-2">Polsek Semarang Timur</h3>
                             <p class="text-gray-600 text-sm mb-4">Layanan pengaduan dan perlindungan kepolisian.</p>
                         </div>
-                        <div class="mt-auto">
-                             <button data-number="0246715632" class="copy-button brand-bg-main text-white font-semibold px-6 py-2 rounded-lg hover:bg-blue-600 transition duration-300 inline-block w-full sm:w-auto">
+                        <div class="mt-auto space-y-2">
+                             <button data-number="0246715632" class="copy-button brand-bg-main text-white font-semibold px-6 py-2 rounded-lg hover:bg-blue-600 transition duration-300 w-full">
                                 Salin No - (024) 6715632
                             </button>
-                            <a href="https://restabessmg.jateng.polri.go.id/polsek-semarang-timur/" target="_blank" rel="noopener noreferrer" class="website-button font-semibold px-6 py-2 rounded-lg hover:bg-blue-50 transition duration-300 inline-block w-full sm:w-auto">
+                            <a href="https://restabessmg.jateng.polri.go.id/polsek-semarang-timur/" target="_blank" rel="noopener noreferrer" class="website-button font-semibold px-6 py-2 rounded-lg hover:bg-blue-50 transition duration-300 w-full">
                                 Kunjungi Website
                             </a>
                         </div>
                     </div>
                     
                     <!-- Contact Card: PSM -->
-                    <div class="bg-white p-6 rounded-lg shadow-lg text-center">
-                        <h3 class="font-bold text-lg section-title mb-2">Pekerja Sosial Masyarakat</h3>
-                        <p class="text-gray-600 text-sm mb-4">Konseling dan bantuan sosial di tingkat kelurahan.</p>
-                        <button data-number="085101984212" class="copy-button brand-bg-main text-white font-semibold px-6 py-2 rounded-lg hover:bg-blue-600 transition duration-300 inline-block w-full sm:w-auto">
+                    <div class="bg-white p-6 rounded-lg shadow-lg text-center flex flex-col justify-between">
+                        <div>
+                            <h3 class="font-bold text-lg section-title mb-2">Pekerja Sosial Masyarakat</h3>
+                            <p class="text-gray-600 text-sm mb-4">Konseling dan bantuan sosial di tingkat kelurahan.</p>
+                        </div>
+                        <button data-number="085101984212" class="copy-button brand-bg-main text-white font-semibold px-6 py-2 rounded-lg hover:bg-blue-600 transition duration-300 inline-block w-full sm:w-auto mt-auto">
                            Salin No - 085101984212
                         </button>
                     </div>
 
                     <!-- Contact Card: Karang Taruna -->
-                    <div class="bg-white p-6 rounded-lg shadow-lg text-center">
-                        <h3 class="font-bold text-lg section-title mb-2">Karang Taruna</h3>
-                        <p class="text-gray-600 text-sm mb-4">Wadah pengembangan generasi muda dan sosial.</p>
-                        <button data-number="081325912001" class="copy-button brand-bg-main text-white font-semibold px-6 py-2 rounded-lg hover:bg-blue-600 transition duration-300 inline-block w-full sm:w-auto">
+                    <div class="bg-white p-6 rounded-lg shadow-lg text-center flex flex-col justify-between">
+                         <div>
+                            <h3 class="font-bold text-lg section-title mb-2">Karang Taruna</h3>
+                            <p class="text-gray-600 text-sm mb-4">Wadah pengembangan generasi muda dan sosial.</p>
+                        </div>
+                        <button data-number="081325912001" class="copy-button brand-bg-main text-white font-semibold px-6 py-2 rounded-lg hover:bg-blue-600 transition duration-300 inline-block w-full sm:w-auto mt-auto">
                            Salin No - 081325912001
                         </button>
                     </div>
@@ -619,11 +642,11 @@
                             <h3 class="font-bold text-lg section-title mb-2">Dinas Sosial Kota Semarang</h3>
                             <p class="text-gray-600 text-sm mb-4">Layanan sosial terpadu dari pemerintah kota.</p>
                          </div>
-                         <div class="mt-auto">
-                             <button data-number="0243547528" class="copy-button brand-bg-main text-white font-semibold px-6 py-2 rounded-lg hover:bg-blue-600 transition duration-300 inline-block w-full sm:w-auto">
+                         <div class="mt-auto space-y-2">
+                             <button data-number="0243547528" class="copy-button brand-bg-main text-white font-semibold px-6 py-2 rounded-lg hover:bg-blue-600 transition duration-300 w-full">
                                 Salin No - (024) 3547528
                             </button>
-                             <a href="https://dinsos.semarangkota.go.id/" target="_blank" rel="noopener noreferrer" class="website-button font-semibold px-6 py-2 rounded-lg hover:bg-blue-50 transition duration-300 inline-block w-full sm:w-auto">
+                             <a href="https://dinsos.semarangkota.go.id/" target="_blank" rel="noopener noreferrer" class="website-button font-semibold px-6 py-2 rounded-lg hover:bg-blue-50 transition duration-300 w-full">
                                 Kunjungi Website
                             </a>
                         </div>
@@ -684,9 +707,9 @@
                 <div class="mt-12">
                     <h3 class="text-2xl font-bold text-gray-700 mb-8">Penyelenggara</h3>
                     <div class="flex justify-center items-center gap-8 md:gap-12 flex-wrap">
-                        <img src="https://github.com/ChocoToppy/Portal-ASA-Aksi-Preventif-Sosial-/blob/master/assets/images/Logo%20USM.png?raw=true" alt="Logo Universitas Semarang" class="h-24 object-contain" title="Universitas Semarang">
-                        <img src="https://github.com/ChocoToppy/Portal-ASA-Aksi-Preventif-Sosial-/blob/master/assets/images/Logo%20LPPM.png?raw=true" alt="Logo LPPM USM" class="w-56 object-contain" title="LPPM Universitas Semarang">
-                        <img src="https://github.com/ChocoToppy/Portal-ASA-Aksi-Preventif-Sosial-/blob/master/assets/images/Logo%20Korcam%20Semarang%20Timur.jpeg?raw=true" alt="Logo KKN Korcam Semarang Timur" class="h-24 object-contain" title="KKN USM XXVII 2025 Korcam Semarang Timur">
+                        <img src="https://github.com/ChocoToppy/PortalASA/blob/master/assets/images/Logo%20USM.png?raw=true" alt="Logo Universitas Semarang" class="h-24 object-contain" title="Universitas Semarang">
+                        <img src="https://github.com/ChocoToppy/PortalASA/blob/master/assets/images/Logo%20LPPM.png?raw=true" alt="Logo LPPM USM" class="w-56 object-contain" title="LPPM Universitas Semarang">
+                        <img src="https://github.com/ChocoToppy/PortalASA/blob/master/assets/images/Logo%20Korcam%20Semarang%20Timur.jpeg?raw=true" alt="Logo KKN Korcam Semarang Timur" class="h-24 object-contain" title="KKN USM XXVII 2025 Korcam Semarang Timur">
                     </div>
                 </div>
 
@@ -695,19 +718,19 @@
                     <div class="flex justify-center items-center gap-6 md:gap-10 flex-wrap">
                          <!-- Partner Logos -->
                         <div class="flex flex-col items-center justify-start w-32 h-28">
-                            <img src="https://github.com/ChocoToppy/Portal-ASA-Aksi-Preventif-Sosial-/blob/master/assets/images/Pekerja%20Sosial%20Masyarakat.png?raw=true" alt="Logo PSM" class="h-20 object-contain">
+                            <img src="https://github.com/ChocoToppy/PortalASA/blob/master/assets/images/Pekerja%20Sosial%20Masyarakat.png?raw=true" alt="Logo PSM" class="h-20 object-contain">
                             <p class="mt-2 text-sm font-semibold text-gray-700 text-center">PSM</p>
                         </div>
                         <div class="flex flex-col items-center justify-start w-32 h-28">
-                            <img src="https://github.com/ChocoToppy/Portal-ASA-Aksi-Preventif-Sosial-/blob/master/assets/images/Karang%20Taruna.png?raw=true" alt="Logo Karang Taruna" class="h-20 object-contain">
+                            <img src="https://github.com/ChocoToppy/PortalASA/blob/master/assets/images/Karang%20Taruna.png?raw=true" alt="Logo Karang Taruna" class="h-20 object-contain">
                             <p class="mt-2 text-sm font-semibold text-gray-700 text-center">Karang Taruna</p>
                         </div>
                         <div class="flex flex-col items-center justify-start w-32 h-28">
-                            <img src="https://github.com/ChocoToppy/Portal-ASA-Aksi-Preventif-Sosial-/blob/master/assets/images/JPPA.jpg?raw=true" alt="Logo JPPA" class="h-20 object-contain rounded-md">
+                            <img src="https://github.com/ChocoToppy/PortalASA/blob/master/assets/images/JPPA.jpg?raw=true" alt="Logo JPPA" class="h-20 object-contain rounded-md">
                             <p class="mt-2 text-sm font-semibold text-gray-700 text-center">JPPA</p>
                         </div>
                         <div class="flex flex-col items-center justify-start w-32 h-28">
-                            <img src="https://github.com/ChocoToppy/Portal-ASA-Aksi-Preventif-Sosial-/blob/master/assets/images/Garpu%20Perak.png?raw=true" alt="Logo Garpu Perak" class="h-20 object-contain">
+                            <img src="https://github.com/ChocoToppy/PortalASA/blob/master/assets/images/Garpu%20Perak.png?raw=true" alt="Logo Garpu Perak" class="h-20 object-contain">
                             <p class="mt-2 text-sm font-semibold text-gray-700 text-center">Garpu Perak</p>
                         </div>
                     </div>

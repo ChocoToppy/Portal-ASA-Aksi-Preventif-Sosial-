@@ -20,29 +20,96 @@
     <meta name="twitter:card" content="summary_large_image">
     
     <!-- Chosen Palette: Calm Harmony -->
-    <!-- Application Structure Plan: Single-page landing site. Flow: Hero -> Isu Sosial (Education) -> Langkah Pertama (Action Guidance) -> Materi Edukasi (Deeper Resources) -> Cari Bantuan (Contacts, now with website links & consistent button widths) -> Lokasi Bantuan (Maps - Vertical) -> Tentang Proyek (Trust). Added site logo in header. -->
-    <!-- Visualization & Content Choices: Text/Accordion for issues; Cards/Links for resources; Text/Lists for first steps; Buttons (copy + link) for contacts; Embedded iframes for maps; Links for sharing. -->
+    <!-- Application Structure Plan: Single-page landing site. Flow: Hero -> Isu Sosial -> Langkah Pertama -> Materi Edukasi -> Cari Bantuan -> Lokasi Bantuan -> Tentang Proyek. Increased header spacing. -->
+    <!-- Visualization & Content Choices: Text/Accordion for issues; Cards/Links for resources; Text/Lists/Button for first steps; Buttons (copy + link) for contacts; Embedded iframes for maps; Links for sharing. -->
     <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- AOS Library for Scroll Animations -->
+    <link href="https://unpkg.com/aos@2.3.4/dist/aos.css" rel="stylesheet">
+    
     <style>
         body {
             font-family: 'Inter', sans-serif;
-            background-color: #FDFBF8; /* Warm off-white */
+            background-color: #FDFBF8; /* Warm off-white base */
+            line-height: 1.6; /* Increased default line height */
+            letter-spacing: 0.01em; /* Slight increase in letter spacing */
         }
+        /* Navbar scroll effect */
+        #header {
+            transition: background-color 0.3s ease, box-shadow 0.3s ease;
+             background-color: rgba(255, 255, 255, 0.8); /* Initial semi-transparent */
+             backdrop-filter: blur(10px);
+        }
+        #header.scrolled {
+            background-color: rgba(255, 255, 255, 0.95); /* More opaque white */
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06); /* Standard shadow */
+        }
+        /* Link hover effect */
+        nav a {
+            position: relative;
+            padding-bottom: 4px; /* Space for underline */
+        }
+        nav a::after {
+            content: "";
+            position: absolute;
+            width: 0%;
+            height: 2px;
+            left: 0;
+            bottom: 0px; /* Position underline */
+            background: #3b82f6; /* Blue-500 */
+            transition: width 0.3s ease;
+        }
+        nav a:hover::after {
+            width: 100%;
+        }
+        /* Hero Section Gradient - stays */
         .hero-gradient {
-            background: linear-gradient(135deg, rgba(235, 245, 255, 0.7) 0%, rgba(254, 235, 235, 0.7) 100%);
+            /* Layer both gradient and pattern */
+            background-image:
+                url("https://raw.githubusercontent.com/ChocoToppy/PortalASA/6e1ac0805ce394b9bcc5d7b3c190c19d80af1d47/assets/topography.svg"),
+                linear-gradient(135deg, rgba(235, 245, 255, 0.8) 0%, rgba(254, 235, 235, 0.8) 100%);
+
+            /* Blend softly so pattern doesn't overpower */
+            background-blend-mode: overlay; /* or try multiply for darker */
+            /* Ensure the pattern tiles nicely and gradient covers full area */
+            background-repeat: repeat, no-repeat;
+            background-size: auto, cover;
+            background-position: center;
+    
+            /* Optional: slight animation to make gradient feel alive */
+            animation: gradientShift 50s ease infinite;
+
         }
+
+    @keyframes gradientShift {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        /* New Gradients for sections */
+        .gradient-blue-light {
+            background: linear-gradient(to bottom right, #f0f9ff, #e0f2fe); /* sky-50 to sky-100 */
+        }
+        .gradient-slate-light {
+            background: linear-gradient(to bottom left, #f8fafc, #eef2f7); /* slate-50 to adjusted lighter slate */
+        }
+        /* Accordion specific styles */
         .accordion-content {
             max-height: 0;
             overflow: hidden;
-            transition: max-height 0.5s ease-in-out;
+            transition: max-height 0.5s ease-out; 
+            background-color: #ffffff; 
         }
         .accordion-content.open {
-            max-height: 1000px; /* Adjust as needed */
+            max-height: 1000px; 
+            transition: max-height 0.5s ease-in; 
         }
+        /* General text and brand colors */
         .section-title {
             color: #2c3e50; /* Dark Slate Blue */
         }
@@ -58,19 +125,25 @@
         .brand-text-secondary {
             color: #0c4a6e; /* Sky-900 */
         }
+        /* List styling */
         .accordion-content ul, #langkah-pertama ul {
             list-style-position: inside;
             padding-left: 0.5rem;
         }
          .accordion-content li, #langkah-pertama li {
             margin-bottom: 0.5rem;
-        }
+         }
+         #langkah-pertama li {
+             display: list-item; 
+         }
+
+        /* Map container styling */
         .map-container {
             position: relative;
             overflow: hidden;
-            padding-top: 60%; /* Adjusted for a slightly wider feel in single column, approx 16:9.6 */
-            border-radius: 0.5rem;
-            width: 100%; /* Ensure it takes full width of its container */
+            padding-top: 60%; 
+            border-radius: 0.75rem; 
+            width: 100%; 
         }
         .map-container iframe {
             position: absolute;
@@ -80,16 +153,25 @@
             height: 100%;
             border: 0;
         }
-        /* Style for share buttons */
+        /* Share buttons */
         .share-button {
             display: inline-flex;
             align-items: center;
+            justify-content: center; /* Center content */
             padding: 0.5rem 1rem;
-            margin: 0 0.25rem;
+            margin: 0.25rem 0; /* Adjusted margin for vertical stacking */
             border-radius: 0.375rem;
             text-decoration: none;
             font-weight: 500;
             transition: background-color 0.3s ease;
+            width: 160px; /* Give a fixed width for consistency */
+            max-width: 100%;
+        }
+        @media (min-width: 640px) { /* sm breakpoint */
+             .share-button {
+                 margin: 0 0.25rem; /* Revert to horizontal margin */
+                 width: auto; /* Revert to auto width */
+             }
         }
         .share-wa {
             background-color: #25D366;
@@ -106,63 +188,112 @@
             background-color: #135FBC;
         }
         .share-button svg {
-            width: 1.25rem; /* 20px */
-            height: 1.25rem; /* 20px */
-            margin-right: 0.5rem; /* 8px */
+            width: 1.25rem; 
+            height: 1.25rem; 
+            margin-right: 0.5rem; 
             fill: currentColor;
         }
-        /* Style for website link button */
+        /* Website & Copy buttons */
         .website-button {
-             margin-top: 0.5rem; /* 8px */
-             border: 1px solid #3b82f6; /* Blue-500 */
-             color: #3b82f6; /* Blue-500 */
+             margin-top: 0.5rem;
+             border: 1px solid #3b82f6; 
+             color: #3b82f6; 
              background-color: white;
-             display: inline-block; /* Needed for width */
-             text-align: center; /* Center text */
+             display: inline-block; 
+             text-align: center; 
         }
          .website-button:hover {
-            background-color: #eff6ff; /* Blue-50 */
+            background-color: #eff6ff; 
          }
-         /* Ensure copy button uses full width too if needed */
          .copy-button {
-             display: inline-block; /* Needed for width */
-             text-align: center; /* Center text */
+             display: inline-block; 
+             text-align: center; 
          }
-
+         /* Isu Sosial cards - refined for glitch fix */
+         .isu-card {
+             border-left: 5px solid #3b82f6; /* Blue-500 */
+             background-color: #f8fafc; /* slate-50 */
+             border-radius: 0.75rem; 
+             box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05); 
+             transition: transform 0.3s ease, box-shadow 0.3s ease; 
+             overflow: hidden; 
+             border: 1px solid #e2e8f0; /* slate-200 */
+         }
+         .isu-card:hover {
+             transform: translateY(-5px); 
+             box-shadow: 0 15px 20px -3px rgba(0, 0, 0, 0.15), 0 6px 8px -2px rgba(0, 0, 0, 0.08); 
+         }
+         .isu-card-trigger-area { 
+             padding: 1.5rem; /* p-6 */
+             cursor: pointer; 
+         }
+        
+         .isu-icon-bg {
+             background-color: #bfdbfe; /* blue-200 */
+             color: #1d4ed8; /* blue-700 */
+             width: 2.5rem; 
+             height: 2.5rem; 
+             border-radius: 9999px; 
+             display: flex;
+             align-items: center;
+             justify-content: center;
+             flex-shrink: 0;
+         }
+         /* Styling for material cards */
+         .material-card {
+            border-radius: 0.75rem; 
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06); 
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+         }
+         .material-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 10px -1px rgba(0, 0, 0, 0.15), 0 4px 6px -2px rgba(0, 0, 0, 0.08);
+         }
+         .contact-card {
+            border-radius: 0.75rem; 
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+         }
+         .contact-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 10px -1px rgba(0, 0, 0, 0.15), 0 4px 6px -2px rgba(0, 0, 0, 0.08);
+         }
+         /* Footer gradient */
+         .footer-gradient {
+            background: linear-gradient(to top, #1f2937, #374151); /* gray-800 to gray-700 */
+         }
     </style>
 </head>
 <body class="text-gray-800">
 
     <!-- Header / Navigation -->
-    <header id="header" class="bg-white/80 backdrop-blur-lg fixed top-0 left-0 right-0 z-50 shadow-sm">
+    <header id="header" class="fixed top-0 left-0 right-0 z-50"> <!-- Initial state handled by JS -->
         <div class="container mx-auto px-6 py-4 flex justify-between items-center">
-             <!-- Updated Title with Logo -->
             <a href="#hero" class="flex items-center text-xl font-bold section-title">
-                <img src="https://github.com/ChocoToppy/PortalASA/blob/master/assets/images/Logo_ASA.png?raw=true" alt="Logo Portal ASA" class="h-8 mr-2 object-contain"> <!-- Adjust h-8 if needed -->
-                Portal <span class="brand-color-main ml-1">ASA</span> <!-- Added ml-1 -->
+                <img src="https://github.com/ChocoToppy/PortalASA/blob/master/assets/images/Logo_ASA.png?raw=true" alt="Logo Portal ASA" class="h-8 mr-2 object-contain" loading="lazy"> 
+                Portal <span class="brand-color-main ml-1">ASA</span> 
             </a>
-            <nav class="hidden md:flex space-x-6 lg:space-x-8">
-                <a href="#isu" class="text-gray-600 hover:text-blue-500 transition duration-300">Isu Sosial</a>
-                <a href="#langkah-pertama" class="text-gray-600 hover:text-blue-500 transition duration-300">Langkah Pertama</a>
-                <a href="#materi" class="text-gray-600 hover:text-blue-500 transition duration-300">Materi Edukasi</a>
-                <a href="#bantuan" class="text-gray-600 hover:text-blue-500 transition duration-300">Cari Bantuan</a>
-                <a href="#lokasi" class="text-gray-600 hover:text-blue-500 transition duration-300">Lokasi Bantuan</a>
-                <!-- Link Tentang Proyek Dihapus dari Navigasi -->
+            <!-- Increased Spacing -->
+            <nav class="hidden md:flex space-x-5 lg:space-x-5"> 
+                <a href="#isu" class="text-gray-700 hover:text-blue-600 font-medium transition duration-300">Isu Sosial</a>
+                <a href="#langkah-pertama" class="text-gray-700 hover:text-blue-600 font-medium transition duration-300">Langkah Pertama</a>
+                <a href="#materi" class="text-gray-700 hover:text-blue-600 font-medium transition duration-300">Materi Edukasi</a>
+                <a href="#bantuan" class="text-gray-700 hover:text-blue-600 font-medium transition duration-300">Cari Bantuan</a>
+                <a href="#lokasi" class="text-gray-700 hover:text-blue-600 font-medium transition duration-300">Lokasi Bantuan</a>
             </nav>
-            <a href="#bantuan" class="hidden md:block bg-blue-500 text-white font-semibold px-4 py-2 rounded-lg hover:bg-blue-600 transition duration-300">
+            <a href="#bantuan" class="hidden md:block bg-blue-500 text-white font-semibold px-4 py-2 rounded-lg hover:bg-blue-600 transition duration-300 shadow-md hover:shadow-lg transform hover:-translate-y-0.5">
                 Kontak Darurat
             </a>
-            <button id="mobile-menu-button" class="md:hidden text-2xl">☰</button>
+            <button id="mobile-menu-button" class="md:hidden text-2xl text-gray-700">☰</button>
         </div>
         <!-- Mobile Menu -->
-        <div id="mobile-menu" class="hidden md:hidden px-6 pb-4">
-            <a href="#isu" class="block py-2 text-gray-600 hover:text-blue-500">Isu Sosial</a>
-            <a href="#langkah-pertama" class="block py-2 text-gray-600 hover:text-blue-500">Langkah Pertama</a>
-            <a href="#materi" class="block py-2 text-gray-600 hover:text-blue-500">Materi Edukasi</a>
-            <a href="#bantuan" class="block py-2 text-gray-600 hover:text-blue-500">Cari Bantuan</a>
-            <a href="#lokasi" class="block py-2 text-gray-600 hover:text-blue-500">Lokasi Bantuan</a>
-             <!-- Link Tentang Proyek Dihapus dari Navigasi -->
-            <a href="#bantuan" class="block mt-2 text-center bg-blue-500 text-white font-semibold px-4 py-2 rounded-lg hover:bg-blue-600">
+        <div id="mobile-menu" class="hidden md:hidden px-6 pb-4 bg-white shadow-inner">
+            <a href="#isu" class="block py-2 text-gray-700 hover:text-blue-600 font-medium">Isu Sosial</a>
+            <a href="#langkah-pertama" class="block py-2 text-gray-700 hover:text-blue-600 font-medium">Langkah Pertama</a>
+            <a href="#materi" class="block py-2 text-gray-700 hover:text-blue-600 font-medium">Materi Edukasi</a>
+            <a href="#bantuan" class="block py-2 text-gray-700 hover:text-blue-600 font-medium">Cari Bantuan</a>
+            <a href="#lokasi" class="block py-2 text-gray-700 hover:text-blue-600 font-medium">Lokasi Bantuan</a>
+            <a href="#bantuan" class="block mt-2 text-center bg-blue-500 text-white font-semibold px-4 py-2 rounded-lg hover:bg-blue-600 shadow-md">
                 Kontak Darurat
             </a>
         </div>
@@ -172,18 +303,17 @@
         <!-- Hero Section -->
         <section id="hero" class="min-h-screen flex items-center pt-20 hero-gradient">
             <div class="container mx-auto px-6 text-center">
-                <h1 class="text-4xl md:text-6xl font-bold section-title leading-tight mb-4">
+                <h1 class="text-4xl md:text-6xl font-bold section-title leading-tight mb-4" data-aos="fade-up">
                     Anda Tidak <span class="brand-color-main">Sendirian.</span><br> Bantuan Selalu Tersedia.
                 </h1>
-                <p class="text-lg md:text-xl text-gray-600 max-w-3xl mx-auto mb-8">
+                <p class="text-lg md:text-xl text-gray-600 max-w-3xl mx-auto mb-8 leading-relaxed tracking-wide" data-aos="fade-up" data-aos-delay="200">
                     Portal Informasi Sosial untuk Aksi Preventif di Kecamatan Semarang Timur. Temukan informasi, kenali tanda-tanda, dan dapatkan bantuan yang Anda butuhkan.
                 </p>
-                <div class="space-y-4 sm:space-y-0 sm:space-x-4">
-                     <a href="#bantuan" class="bg-blue-500 text-white font-bold px-8 py-4 rounded-lg text-lg hover:bg-blue-600 transition duration-300 inline-block shadow-lg">
+                <div class="space-y-4 sm:space-y-0 sm:space-x-4" data-aos="fade-up" data-aos-delay="400">
+                     <a href="#bantuan" class="bg-blue-500 text-white font-bold px-8 py-4 rounded-lg text-lg hover:bg-blue-600 transition duration-300 inline-block shadow-lg hover:shadow-xl transform hover:-translate-y-1">
                         Lihat Kontak Bantuan
                     </a>
-                    <!-- Tombol Baru untuk Langkah Pertama -->
-                    <a href="#langkah-pertama" class="border-2 border-blue-500 text-blue-500 font-bold px-8 py-4 rounded-lg text-lg hover:bg-blue-50 transition duration-300 inline-block">
+                    <a href="#langkah-pertama" class="border-2 border-blue-500 text-blue-500 font-bold px-8 py-4 rounded-lg text-lg hover:bg-blue-50 transition duration-300 inline-block hover:shadow-md transform hover:-translate-y-0.5">
                         Lihat Langkah Pertama
                     </a>
                 </div>
@@ -193,27 +323,27 @@
         <!-- Isu Sosial Section -->
         <section id="isu" class="py-20 bg-white">
             <div class="container mx-auto px-6">
-                <div class="text-center mb-12">
+                <div class="text-center mb-12" data-aos="fade-up">
                     <h2 class="text-3xl md:text-4xl font-bold section-title">Mengenal Isu Sosial di Sekitar Kita</h2>
-                    <p class="text-gray-600 mt-2 max-w-2xl mx-auto">Pendidikan adalah langkah pertama menuju pencegahan. Kenali berbagai isu sosial yang ada untuk melindungi diri sendiri dan orang-orang di sekitar Anda.</p>
+                    <p class="text-gray-600 mt-2 max-w-2xl mx-auto leading-relaxed tracking-wide">Pendidikan adalah langkah pertama menuju pencegahan. Kenali berbagai isu sosial yang ada untuk melindungi diri sendiri dan orang-orang di sekitar Anda.</p>
                 </div>
 
                 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-8 max-w-4xl mx-auto">
                     <!-- Isu Card: Bullying -->
-                    <div class="bg-slate-50 rounded-xl shadow-md overflow-hidden border border-slate-200">
-                        <div class="p-6">
-                            <div class="flex items-center space-x-4 mb-4">
-                                <div class="text-3xl">😠</div>
-                                <h3 class="text-xl font-bold section-title">Perundungan (Bullying)</h3>
+                    <div class="isu-card" data-aos="fade-up" data-aos-delay="100">
+                        <div class="isu-card-trigger-area">
+                            <div class="flex items-center mb-4">
+                                <div class="isu-icon-bg text-xl">😠</div>
+                                <h3 class="ml-4 text-xl font-bold section-title">Perundungan (Bullying)</h3>
                             </div>
                             <p class="text-gray-600 mb-4">Tindakan penggunaan kekuasaan untuk menyakiti seseorang atau sekelompok orang baik secara verbal, fisik, maupun psikologis.</p>
-                            <button class="accordion-toggle font-semibold text-blue-500 hover:text-blue-600">Selengkapnya →</button>
+                            <button class="accordion-toggle font-semibold text-blue-500 hover:text-blue-600 transition duration-150">Selengkapnya →</button>
                         </div>
                         <div class="accordion-content">
-                            <div class="p-6 pt-0 text-gray-600 space-y-4">
+                             <div class="p-6 pt-4 text-gray-700 space-y-4 leading-relaxed tracking-wide">
                                 <div>
-                                    <strong class="text-gray-700">Bentuk-Bentuk Perundungan:</strong>
-                                    <ul class="list-disc mt-2">
+                                    <strong class="font-semibold text-gray-800">Bentuk-Bentuk Perundungan:</strong>
+                                    <ul class="list-disc mt-2 pl-5 text-gray-600">
                                         <li><strong>Verbal:</strong> Ejekan, hinaan, julukan nama yang tidak pantas, dan fitnah.</li>
                                         <li><strong>Fisik:</strong> Pukulan, tendangan, mendorong, atau merusak barang milik korban.</li>
                                         <li><strong>Sosial:</strong> Pengucilan, penyebaran rumor, atau mempermalukan seseorang di depan umum.</li>
@@ -221,32 +351,32 @@
                                     </ul>
                                 </div>
                                 <div>
-                                    <strong class="text-gray-700">Dampak Serius pada Korban:</strong>
-                                    <p class="mt-1">Depresi, kecemasan, gangguan tidur, kehilangan minat pada hobi, penurunan prestasi akademik, hingga cedera fisik dan keinginan untuk bunuh diri.</p>
+                                    <strong class="font-semibold text-gray-800">Dampak Serius pada Korban:</strong>
+                                    <p class="mt-1 text-gray-600">Depresi, kecemasan, gangguan tidur, kehilangan minat pada hobi, penurunan prestasi akademik, hingga cedera fisik dan keinginan untuk bunuh diri.</p>
                                 </div>
                                 <div>
-                                    <strong class="text-gray-700">Yang Bisa Dilakukan:</strong>
-                                    <p class="mt-1">Jangan diam. Bicaralah kepada orang tua, guru, atau orang dewasa yang Anda percaya. Simpan bukti jika terjadi secara online. Beri dukungan kepada teman yang menjadi korban.</p>
+                                    <strong class="font-semibold text-gray-800">Yang Bisa Dilakukan:</strong>
+                                    <p class="mt-1 text-gray-600">Jangan diam. Bicaralah kepada orang tua, guru, atau orang dewasa yang Anda percaya. Simpan bukti jika terjadi secara online. Beri dukungan kepada teman yang menjadi korban.</p>
                                 </div>
                             </div>
                         </div>
                     </div>
 
                     <!-- Isu Card: KDRT -->
-                    <div class="bg-slate-50 rounded-xl shadow-md overflow-hidden border border-slate-200">
-                        <div class="p-6">
-                            <div class="flex items-center space-x-4 mb-4">
-                                <div class="text-3xl">💔</div>
-                                <h3 class="text-xl font-bold section-title">Kekerasan Dalam Rumah Tangga</h3>
+                    <div class="isu-card" data-aos="fade-up" data-aos-delay="200">
+                         <div class="isu-card-trigger-area">
+                            <div class="flex items-center mb-4">
+                                <div class="isu-icon-bg text-xl">💔</div>
+                                <h3 class="ml-4 text-xl font-bold section-title">Kekerasan Dalam Rumah Tangga</h3>
                             </div>
                             <p class="text-gray-600 mb-4">Setiap perbuatan yang berakibat timbulnya kesengsaraan atau penderitaan secara fisik, seksual, atau psikologis dalam lingkup rumah tangga.</p>
-                            <button class="accordion-toggle font-semibold text-blue-500 hover:text-blue-600">Selengkapnya →</button>
+                            <button class="accordion-toggle font-semibold text-blue-500 hover:text-blue-600 transition duration-150">Selengkapnya →</button>
                         </div>
                          <div class="accordion-content">
-                            <div class="p-6 pt-0 text-gray-600 space-y-4">
+                            <div class="p-6 pt-4 text-gray-700 space-y-4 leading-relaxed tracking-wide">
                                 <div>
-                                    <strong class="text-gray-700">Bentuk-Bentuk KDRT:</strong>
-                                    <ul class="list-disc mt-2">
+                                    <strong class="font-semibold text-gray-800">Bentuk-Bentuk KDRT:</strong>
+                                    <ul class="list-disc mt-2 pl-5 text-gray-600">
                                         <li><strong>Fisik:</strong> Memukul, menampar, menendang, atau tindakan lain yang menyebabkan rasa sakit atau luka.</li>
                                         <li><strong>Psikis/Emosional:</strong> Ancaman, hinaan, bentakan, atau tindakan yang merendahkan martabat dan menyebabkan ketakutan.</li>
                                         <li><strong>Seksual:</strong> Pemaksaan hubungan seksual atau aktivitas seksual lain tanpa persetujuan.</li>
@@ -254,72 +384,72 @@
                                     </ul>
                                 </div>
                                 <div>
-                                    <strong class="text-gray-700">Dampak pada Korban:</strong>
-                                    <p class="mt-1">Luka fisik, trauma psikologis jangka panjang (PTSD), depresi, isolasi sosial, dan kehilangan rasa percaya diri. Ingat, ini bukan salah korban.</p>
+                                    <strong class="font-semibold text-gray-800">Dampak pada Korban:</strong>
+                                    <p class="mt-1 text-gray-600">Luka fisik, trauma psikologis jangka panjang (PTSD), depresi, isolasi sosial, dan kehilangan rasa percaya diri. Ingat, ini bukan salah korban.</p>
                                 </div>
                                 <div>
-                                    <strong class="text-gray-700">Yang Bisa Dilakukan:</strong>
-                                    <p class="mt-1">Prioritaskan keselamatan Anda. Cari tempat aman, hubungi lembaga bantuan atau aparat kepolisian. Ceritakan pada orang yang Anda percaya.</p>
+                                    <strong class="font-semibold text-gray-800">Yang Bisa Dilakukan:</strong>
+                                    <p class="mt-1 text-gray-600">Prioritaskan keselamatan Anda. Cari tempat aman, hubungi lembaga bantuan atau aparat kepolisian. Ceritakan pada orang yang Anda percaya.</p>
                                 </div>
                             </div>
                         </div>
                     </div>
 
                     <!-- Isu Card: Pelecehan -->
-                     <div class="bg-slate-50 rounded-xl shadow-md overflow-hidden border border-slate-200">
-                        <div class="p-6">
-                            <div class="flex items-center space-x-4 mb-4">
-                                <div class="text-3xl">🚫</div>
-                                <h3 class="text-xl font-bold section-title">Pelecehan Seksual</h3>
+                     <div class="isu-card" data-aos="fade-up" data-aos-delay="300">
+                        <div class="isu-card-trigger-area">
+                           <div class="flex items-center mb-4">
+                                <div class="isu-icon-bg text-xl">🚫</div>
+                                <h3 class="ml-4 text-xl font-bold section-title">Pelecehan Seksual</h3>
                             </div>
                             <p class="text-gray-600 mb-4">Tindakan bernuansa seksual yang tidak diinginkan, membuat seseorang merasa tidak nyaman, tersinggung, dan terintimidasi.</p>
-                            <button class="accordion-toggle font-semibold text-blue-500 hover:text-blue-600">Selengkapnya →</button>
+                            <button class="accordion-toggle font-semibold text-blue-500 hover:text-blue-600 transition duration-150">Selengkapnya →</button>
                         </div>
                         <div class="accordion-content">
-                            <div class="p-6 pt-0 text-gray-600 space-y-4">
+                            <div class="p-6 pt-4 text-gray-700 space-y-4 leading-relaxed tracking-wide">
                                 <div>
-                                    <strong class="text-gray-700">Bentuk-Bentuk Pelecehan:</strong>
-                                     <ul class="list-disc mt-2">
+                                    <strong class="font-semibold text-gray-800">Bentuk-Bentuk Pelecehan:</strong>
+                                     <ul class="list-disc mt-2 pl-5 text-gray-600">
                                         <li><strong>Verbal:</strong> Komentar tidak senonoh, lelucon jorok, siulan, atau pertanyaan yang bersifat pribadi dan seksual.</li>
                                         <li><strong>Non-Verbal:</strong> Tatapan sensual yang membuat tidak nyaman, gerakan tubuh yang vulgar, atau mengirim konten pornografi.</li>
                                         <li><strong>Fisik:</strong> Sentuhan fisik yang tidak diinginkan di bagian tubuh mana pun.</li>
                                     </ul>
                                 </div>
                                 <div>
-                                    <strong class="text-gray-700">Dampak pada Korban:</strong>
-                                    <p class="mt-1">Rasa malu, cemas, depresi, merasa tidak aman di lingkungan tertentu (sekolah/kerja), dan seringkali menyalahkan diri sendiri.</p>
+                                    <strong class="font-semibold text-gray-800">Dampak pada Korban:</strong>
+                                    <p class="mt-1 text-gray-600">Rasa malu, cemas, depresi, merasa tidak aman di lingkungan tertentu (sekolah/kerja), dan seringkali menyalahkan diri sendiri.</p>
                                 </div>
                                 <div>
-                                    <strong class="text-gray-700">Yang Bisa Dilakukan:</strong>
-                                    <p class="mt-1">Katakan "TIDAK" dengan tegas. Tetapkan batasan yang jelas. Jika memungkinkan, dokumentasikan kejadian dan laporkan ke pihak berwenang atau lembaga terkait.</p>
+                                    <strong class="font-semibold text-gray-800">Yang Bisa Dilakukan:</strong>
+                                    <p class="mt-1 text-gray-600">Katakan "TIDAK" dengan tegas. Tetapkan batasan yang jelas. Jika memungkinkan, dokumentasikan kejadian dan laporkan ke pihak berwenang atau lembaga terkait.</p>
                                 </div>
                             </div>
                         </div>
                     </div>
                     
                     <!-- Isu Card: Incest -->
-                    <div class="bg-slate-50 rounded-xl shadow-md overflow-hidden border border-slate-200">
-                        <div class="p-6">
-                            <div class="flex items-center space-x-4 mb-4">
-                                <div class="text-3xl">🏠</div>
-                                <h3 class="text-xl font-bold section-title">Insiden Inses</h3>
+                    <div class="isu-card" data-aos="fade-up" data-aos-delay="400">
+                         <div class="isu-card-trigger-area">
+                             <div class="flex items-center mb-4">
+                                <div class="isu-icon-bg text-xl">🏠</div>
+                                <h3 class="ml-4 text-xl font-bold section-title">Insiden Inses</h3>
                             </div>
                             <p class="text-gray-600 mb-4">Hubungan seksual yang terjadi antara orang-orang yang memiliki ikatan keluarga dekat. Ini adalah bentuk kekerasan seksual yang serius.</p>
-                             <button class="accordion-toggle font-semibold text-blue-500 hover:text-blue-600">Selengkapnya →</button>
+                             <button class="accordion-toggle font-semibold text-blue-500 hover:text-blue-600 transition duration-150">Selengkapnya →</button>
                         </div>
                         <div class="accordion-content">
-                            <div class="p-6 pt-0 text-gray-600 space-y-4">
+                             <div class="p-6 pt-4 text-gray-700 space-y-4 leading-relaxed tracking-wide">
                                  <div>
-                                    <strong class="text-gray-700">Mengapa Ini Sangat Serius:</strong>
-                                    <p class="mt-1">Inses melibatkan pelanggaran kepercayaan yang fundamental dalam keluarga. Seringkali terjadi karena adanya ketidakseimbangan kekuasaan, di mana pelaku (biasanya lebih tua atau kuat) menyalahgunakan posisinya terhadap korban.</p>
+                                    <strong class="font-semibold text-gray-800">Mengapa Ini Sangat Serius:</strong>
+                                    <p class="mt-1 text-gray-600">Inses melibatkan pelanggaran kepercayaan yang fundamental dalam keluarga. Seringkali terjadi karena adanya ketidakseimbangan kekuasaan, di mana pelaku (biasanya lebih tua atau kuat) menyalahgunakan posisinya terhadap korban.</p>
                                 </div>
                                 <div>
-                                    <strong class="text-gray-700">Dampak Jangka Panjang:</strong>
-                                    <p class="mt-1">Trauma psikologis yang sangat berat, kebingungan identitas dan peran dalam keluarga, depresi, kecemasan, dan kesulitan besar dalam membentuk hubungan yang sehat di masa depan.</p>
+                                    <strong class="font-semibold text-gray-800">Dampak Jangka Panjang:</strong>
+                                    <p class="mt-1 text-gray-600">Trauma psikologis yang sangat berat, kebingungan identitas dan peran dalam keluarga, depresi, kecemasan, dan kesulitan besar dalam membentuk hubungan yang sehat di masa depan.</p>
                                 </div>
                                 <div>
-                                    <strong class="text-gray-700">Yang Harus Dilakukan:</strong>
-                                    <p class="mt-1">Ini adalah kejahatan dan situasi yang sangat sulit. Korban membutuhkan bantuan profesional sesegera mungkin dari psikolog, psikiater, atau lembaga perlindungan anak dan perempuan. Laporkan kepada pihak berwenang untuk menghentikan pelaku.</p>
+                                    <strong class="font-semibold text-gray-800">Yang Harus Dilakukan:</strong>
+                                    <p class="mt-1 text-gray-600">Ini adalah kejahatan dan situasi yang sangat sulit. Korban membutuhkan bantuan profesional sesegera mungkin dari psikolog, psikiater, atau lembaga perlindungan anak dan perempuan. Laporkan kepada pihak berwenang untuk menghentikan pelaku.</p>
                                 </div>
                             </div>
                         </div>
@@ -328,25 +458,30 @@
             </div>
         </section>
 
-         <!-- Langkah Pertama Section (Moved Here) -->
-        <section id="langkah-pertama" class="py-20 bg-blue-50">
-            <div class="container mx-auto px-6 max-w-4xl">
-                <div class="text-center mb-12">
+         <!-- Langkah Pertama Section -->
+        <section id="langkah-pertama" class="py-20 gradient-blue-light">
+             <div class="container mx-auto px-6 max-w-4xl">
+                <div class="text-center mb-12" data-aos="fade-up">
                     <h2 class="text-3xl md:text-4xl font-bold section-title">Apa yang Harus Dilakukan? (Langkah Pertama)</h2>
-                    <p class="text-gray-600 mt-2 max-w-2xl mx-auto">Jika Anda mengalami, menyaksikan, atau mengetahui adanya isu sosial, berikut adalah langkah awal yang bisa Anda ambil.</p>
+                    <p class="text-gray-600 mt-2 max-w-2xl mx-auto leading-relaxed tracking-wide">Jika Anda mengalami, menyaksikan, atau mengetahui adanya isu sosial, berikut adalah langkah awal yang bisa Anda ambil.</p>
                 </div>
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
-                    <div class="bg-red-100 border border-red-200 rounded-lg p-6 shadow">
+                    <div class="bg-red-50 border border-red-200 rounded-xl p-6 shadow-md transition-all duration-300 hover:shadow-lg" data-aos="fade-up" data-aos-delay="100">
                         <h3 class="text-xl font-bold text-red-800 mb-3">🚨 Jika Anda Mengalami / Dalam Bahaya Mendesak:</h3>
-                        <ul class="list-decimal text-red-700 space-y-2">
+                        <ul class="list-decimal text-red-700 space-y-2 leading-relaxed">
                             <li><strong>Prioritaskan Keselamatan:</strong> Segera cari tempat yang aman atau orang yang bisa melindungi Anda.</li>
-                            <li><strong>Hubungi Bantuan Cepat:</strong> Gunakan kontak darurat di bawah ini (Polsek) atau berteriak minta tolong jika memungkinkan.</li>
+                            <li>
+                                <strong>Hubungi Bantuan Cepat:</strong> Gunakan kontak darurat Polsek di bawah ini atau berteriak minta tolong jika memungkinkan.
+                                <button data-number="0246715632" class="copy-button mt-2 text-sm bg-red-500 text-white font-semibold px-4 py-1 rounded-md hover:bg-red-600 transition duration-300 inline-block w-full sm:w-auto shadow">
+                                    Salin No Polsek - (024) 6715632
+                                </button>
+                            </li>
                             <li><strong>Jangan Menyendiri:</strong> Jika sudah aman, hubungi teman, keluarga, atau kontak bantuan lain yang tertera.</li>
                         </ul>
                     </div>
-                    <div class="bg-sky-100 border border-sky-200 rounded-lg p-6 shadow">
+                    <div class="bg-sky-50 border border-sky-200 rounded-xl p-6 shadow-md transition-all duration-300 hover:shadow-lg" data-aos="fade-up" data-aos-delay="200">
                         <h3 class="text-xl font-bold text-sky-800 mb-3">🤝 Jika Anda Menyaksikan / Mengetahui:</h3>
-                        <ul class="list-decimal text-sky-700 space-y-2">
+                        <ul class="list-decimal text-sky-700 space-y-2 leading-relaxed">
                             <li><strong>Dengarkan & Percaya:</strong> Jika seseorang bercerita, dengarkan dengan empati tanpa menghakimi. Yakinkan mereka bahwa ini bukan salah mereka.</li>
                             <li><strong>Tawarkan Informasi Bantuan:</strong> Arahkan mereka ke Portal ASA ini atau berikan nomor kontak bantuan yang relevan. Jangan memaksa jika mereka belum siap.</li>
                             <li><strong>Jaga Kerahasiaan Korban:</strong> Jangan menyebarkan cerita atau informasi pribadi korban kepada orang lain tanpa izin.</li>
@@ -358,51 +493,47 @@
         </section>
 
         <!-- Materi Edukasi & Sumber Daya Section -->
-        <section id="materi" class="py-20 bg-slate-50">
-            <div class="container mx-auto px-6">
-                <div class="text-center mb-12">
+        <section id="materi" class="py-20 gradient-slate-light">
+             <div class="container mx-auto px-6">
+                <div class="text-center mb-12" data-aos="fade-up">
                     <h2 class="text-3xl md:text-4xl font-bold section-title">Materi Edukasi & Sumber Daya</h2>
-                    <p class="text-gray-600 mt-2 max-w-2xl mx-auto">Perdalam pemahaman Anda dengan materi-materi edukasi dan sumber daya eksternal. Klik untuk mengakses.</p>
+                    <p class="text-gray-600 mt-2 max-w-2xl mx-auto leading-relaxed tracking-wide">Perdalam pemahaman Anda dengan materi-materi edukasi dan sumber daya eksternal. Klik untuk mengakses.</p>
                 </div>
 
                 <div class="max-w-5xl mx-auto space-y-12">
                     <!-- Bullying Resources -->
-                    <div class="bg-white rounded-xl shadow-md p-8 border border-slate-200">
+                    <div class="bg-white rounded-xl shadow-lg p-8 border border-slate-200" data-aos="fade-up">
                         <h3 class="text-2xl font-bold section-title mb-6 text-center md:text-left">Perundungan (Bullying)</h3>
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                            <!-- Materi Card -->
-                            <div class="flex flex-col bg-gray-50 p-6 rounded-lg shadow border border-gray-200">
+                            <div class="material-card flex flex-col bg-gray-50 p-6 border border-gray-200">
                                 <p class="text-sm font-semibold text-blue-600 mb-1">Materi Internal (PDF)</p>
                                 <h4 class="font-bold text-gray-800 mb-2">Stop Bullying! Mengatasi & Mencegah</h4>
-                                <p class="text-gray-600 text-sm mb-4">Panduan lengkap mengenai perundungan, termasuk cara mengenali, mengatasi, dan mencegahnya.</p>
-                                <a href="https://drive.google.com/file/d/1QCQTjnspWzYCOg8GkGoly93XkgJmXUL0/view?usp=drive_link" target="_blank" rel="noopener noreferrer" class="brand-bg-main text-white font-semibold px-6 py-2 rounded-lg hover:bg-blue-600 transition duration-300 w-full md:w-auto mt-auto text-center">
+                                <p class="text-gray-600 text-sm mb-4 leading-relaxed">Panduan lengkap mengenai perundungan, termasuk cara mengenali, mengatasi, dan mencegahnya.</p>
+                                <a href="https://drive.google.com/file/d/1QCQTjnspWzYCOg8GkGoly93XkgJmXUL0/view?usp=drive_link" target="_blank" rel="noopener noreferrer" class="brand-bg-main text-white font-semibold px-6 py-2 rounded-lg hover:bg-blue-600 transition duration-300 w-full md:w-auto mt-auto text-center shadow-md">
                                     Baca Materi
                                 </a>
                             </div>
-                            <!-- Materi Card -->
-                            <div class="flex flex-col bg-gray-50 p-6 rounded-lg shadow border border-gray-200">
+                            <div class="material-card flex flex-col bg-gray-50 p-6 border border-gray-200">
                                 <p class="text-sm font-semibold text-blue-600 mb-1">Video Edukasi (YouTube)</p>
                                 <h4 class="font-bold text-gray-800 mb-2">KPAI: STOP BULLYING PADA ANAK</h4>
-                                <p class="text-gray-600 text-sm mb-4">Video sosialisasi resmi dari KPAI untuk menghentikan perundungan pada anak.</p>
-                                <a href="https://www.youtube.com/watch?v=Kxq0EKrk8Hc" target="_blank" rel="noopener noreferrer" class="brand-bg-main text-white font-semibold px-6 py-2 rounded-lg hover:bg-blue-600 transition duration-300 w-full md:w-auto mt-auto text-center">
+                                <p class="text-gray-600 text-sm mb-4 leading-relaxed">Video sosialisasi resmi dari KPAI untuk menghentikan perundungan pada anak.</p>
+                                <a href="https://www.youtube.com/watch?v=Kxq0EKrk8Hc" target="_blank" rel="noopener noreferrer" class="brand-bg-main text-white font-semibold px-6 py-2 rounded-lg hover:bg-blue-600 transition duration-300 w-full md:w-auto mt-auto text-center shadow-md">
                                     Tonton Video
                                 </a>
                             </div>
-                             <!-- Materi Card -->
-                            <div class="flex flex-col bg-gray-50 p-6 rounded-lg shadow border border-gray-200">
+                            <div class="material-card flex flex-col bg-gray-50 p-6 border border-gray-200">
                                 <p class="text-sm font-semibold text-blue-600 mb-1">Situs Resmi</p>
                                 <h4 class="font-bold text-gray-800 mb-2">Komisi Perlindungan Anak Indonesia</h4>
-                                <p class="text-gray-600 text-sm mb-4">Situs resmi lembaga negara yang mengawasi perlindungan anak di Indonesia.</p>
-                                <a href="https://www.kpai.go.id" target="_blank" rel="noopener noreferrer" class="brand-bg-main text-white font-semibold px-6 py-2 rounded-lg hover:bg-blue-600 transition duration-300 w-full md:w-auto mt-auto text-center">
+                                <p class="text-gray-600 text-sm mb-4 leading-relaxed">Situs resmi lembaga negara yang mengawasi perlindungan anak di Indonesia.</p>
+                                <a href="https://www.kpai.go.id" target="_blank" rel="noopener noreferrer" class="brand-bg-main text-white font-semibold px-6 py-2 rounded-lg hover:bg-blue-600 transition duration-300 w-full md:w-auto mt-auto text-center shadow-md">
                                     Kunjungi Situs
                                 </a>
                             </div>
-                            <!-- Materi Card -->
-                            <div class="flex flex-col bg-gray-50 p-6 rounded-lg shadow border border-gray-200">
+                            <div class="material-card flex flex-col bg-gray-50 p-6 border border-gray-200">
                                 <p class="text-sm font-semibold text-blue-600 mb-1">Artikel Resmi</p>
                                 <h4 class="font-bold text-gray-800 mb-2">UNICEF: Apa itu bullying?</h4>
-                                <p class="text-gray-600 text-sm mb-4">Penjelasan mendalam dari UNICEF mengenai apa itu perundungan dan cara mengatasinya.</p>
-                                <a href="https://www.unicef.org/indonesia/id/child-protection/apa-itu-bullying-dan-cara-mengatasinya" target="_blank" rel="noopener noreferrer" class="brand-bg-main text-white font-semibold px-6 py-2 rounded-lg hover:bg-blue-600 transition duration-300 w-full md:w-auto mt-auto text-center">
+                                <p class="text-gray-600 text-sm mb-4 leading-relaxed">Penjelasan mendalam dari UNICEF mengenai apa itu perundungan dan cara mengatasinya.</p>
+                                <a href="https://www.unicef.org/indonesia/id/child-protection/apa-itu-bullying-dan-cara-mengatasinya" target="_blank" rel="noopener noreferrer" class="brand-bg-main text-white font-semibold px-6 py-2 rounded-lg hover:bg-blue-600 transition duration-300 w-full md:w-auto mt-auto text-center shadow-md">
                                     Kunjungi Situs
                                 </a>
                             </div>
@@ -410,153 +541,136 @@
                     </div>
 
                     <!-- Pelecehan dan Kekerasan Seksual Resources -->
-                    <div class="bg-white rounded-xl shadow-md p-8 border border-slate-200">
+                     <div class="bg-white rounded-xl shadow-lg p-8 border border-slate-200" data-aos="fade-up">
                         <h3 class="text-2xl font-bold section-title mb-6 text-center md:text-left">Pelecehan dan Kekerasan Seksual</h3>
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                            <!-- Materi Card -->
-                            <div class="flex flex-col bg-gray-50 p-6 rounded-lg shadow border border-gray-200">
+                            <div class="material-card flex flex-col bg-gray-50 p-6 border border-gray-200">
                                 <p class="text-sm font-semibold text-blue-600 mb-1">Video Edukasi (YouTube)</p>
                                 <h4 class="font-bold text-gray-800 mb-2">Memahami UU TPKS (KemenPPPA)</h4>
-                                <p class="text-gray-600 text-sm mb-4">Video komunikasi publik dari Kementerian PPPA yang menjelaskan isi Undang-Undang Tindak Pidana Kekerasan Seksual.</p>
-                                <a href="https://www.youtube.com/watch?v=DgwZPhnww6U" target="_blank" rel="noopener noreferrer" class="brand-bg-main text-white font-semibold px-6 py-2 rounded-lg hover:bg-blue-600 transition duration-300 w-full md:w-auto mt-auto text-center">
+                                <p class="text-gray-600 text-sm mb-4 leading-relaxed">Video komunikasi publik dari Kementerian PPPA yang menjelaskan isi UU TPKS.</p>
+                                <a href="https://www.youtube.com/watch?v=DgwZPhnww6U" target="_blank" rel="noopener noreferrer" class="brand-bg-main text-white font-semibold px-6 py-2 rounded-lg hover:bg-blue-600 transition duration-300 w-full md:w-auto mt-auto text-center shadow-md">
                                     Tonton Video
                                 </a>
                             </div>
-                            <!-- Materi Card -->
-                            <div class="flex flex-col bg-gray-50 p-6 rounded-lg shadow border border-gray-200">
+                            <div class="material-card flex flex-col bg-gray-50 p-6 border border-gray-200">
                                 <p class="text-sm font-semibold text-blue-600 mb-1">Situs Resmi</p>
                                 <h4 class="font-bold text-gray-800 mb-2">Komnas Perempuan</h4>
-                                <p class="text-gray-600 text-sm mb-4">Situs resmi Komisi Nasional Anti Kekerasan terhadap Perempuan, sumber informasi utama advokasi kebijakan.</p>
-                                <a href="https://www.komnasperempuan.go.id" target="_blank" rel="noopener noreferrer" class="brand-bg-main text-white font-semibold px-6 py-2 rounded-lg hover:bg-blue-600 transition duration-300 w-full md:w-auto mt-auto text-center">
+                                <p class="text-gray-600 text-sm mb-4 leading-relaxed">Situs resmi Komisi Nasional Anti Kekerasan terhadap Perempuan.</p>
+                                <a href="https://www.komnasperempuan.go.id" target="_blank" rel="noopener noreferrer" class="brand-bg-main text-white font-semibold px-6 py-2 rounded-lg hover:bg-blue-600 transition duration-300 w-full md:w-auto mt-auto text-center shadow-md">
                                     Kunjungi Situs
                                 </a>
                             </div>
-                            <!-- Materi Card -->
-                            <div class="flex flex-col bg-gray-50 p-6 rounded-lg shadow border border-gray-200">
+                            <div class="material-card flex flex-col bg-gray-50 p-6 border border-gray-200">
                                 <p class="text-sm font-semibold text-blue-600 mb-1">Artikel</p>
                                 <h4 class="font-bold text-gray-800 mb-2">Pelecehan Seksual di Lingkungan Kerja</h4>
-                                <p class="text-gray-600 text-sm mb-4">Artikel yang menjelaskan bentuk-bentuk dan dampak pelecehan seksual di lingkungan kerja.</p>
-                                <a href="https://opini.kemenkeu.go.id/article/read/pelecehan-seksual-di-lingkungan-kerja" target="_blank" rel="noopener noreferrer" class="brand-bg-main text-white font-semibold px-6 py-2 rounded-lg hover:bg-blue-600 transition duration-300 w-full md:w-auto mt-auto text-center">
+                                <p class="text-gray-600 text-sm mb-4 leading-relaxed">Artikel yang menjelaskan bentuk-bentuk dan dampak pelecehan seksual di tempat kerja.</p>
+                                <a href="https://opini.kemenkeu.go.id/article/read/pelecehan-seksual-di-lingkungan-kerja" target="_blank" rel="noopener noreferrer" class="brand-bg-main text-white font-semibold px-6 py-2 rounded-lg hover:bg-blue-600 transition duration-300 w-full md:w-auto mt-auto text-center shadow-md">
                                     Baca Artikel
                                 </a>
                             </div>
-                            <!-- Materi Card -->
-                            <div class="flex flex-col bg-gray-50 p-6 rounded-lg shadow border border-gray-200">
+                            <div class="material-card flex flex-col bg-gray-50 p-6 border border-gray-200">
                                 <p class="text-sm font-semibold text-blue-600 mb-1">Situs Bantuan Hukum</p>
                                 <h4 class="font-bold text-gray-800 mb-2">LBH APIK Jakarta</h4>
-                                <p class="text-gray-600 text-sm mb-4">Lembaga bantuan hukum yang fokus memberikan pendampingan hukum bagi perempuan dan anak korban kekerasan.</p>
-                                <a href="https://www.lbhapik.org" target="_blank" rel="noopener noreferrer" class="brand-bg-main text-white font-semibold px-6 py-2 rounded-lg hover:bg-blue-600 transition duration-300 w-full md:w-auto mt-auto text-center">
+                                <p class="text-gray-600 text-sm mb-4 leading-relaxed">Lembaga bantuan hukum untuk perempuan dan anak korban kekerasan.</p>
+                                <a href="https://www.lbhapik.org" target="_blank" rel="noopener noreferrer" class="brand-bg-main text-white font-semibold px-6 py-2 rounded-lg hover:bg-blue-600 transition duration-300 w-full md:w-auto mt-auto text-center shadow-md">
                                     Kunjungi Situs
                                 </a>
                             </div>
                         </div>
                     </div>
-
-                    <!-- Kekerasan Dalam Rumah Tangga (KDRT) Resources -->
-                    <div class="bg-white rounded-xl shadow-md p-8 border border-slate-200">
+                     <!-- Kekerasan Dalam Rumah Tangga (KDRT) Resources -->
+                     <div class="bg-white rounded-xl shadow-lg p-8 border border-slate-200" data-aos="fade-up">
                         <h3 class="text-2xl font-bold section-title mb-6 text-center md:text-left">Kekerasan Dalam Rumah Tangga (KDRT)</h3>
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                            <!-- Materi Card -->
-                            <div class="flex flex-col bg-gray-50 p-6 rounded-lg shadow border border-gray-200">
+                            <div class="material-card flex flex-col bg-gray-50 p-6 border border-gray-200">
                                 <p class="text-sm font-semibold text-blue-600 mb-1">Video Kampanye (YouTube)</p>
                                 <h4 class="font-bold text-gray-800 mb-2">Video Kampanye Komnas Perempuan</h4>
-                                <p class="text-gray-600 text-sm mb-4">Video kampanye yang mengajak masyarakat untuk membantu dan mendukung perempuan korban KDRT.</p>
-                                <a href="https://www.youtube.com/watch?v=0eahCH0okr0" target="_blank" rel="noopener noreferrer" class="brand-bg-main text-white font-semibold px-6 py-2 rounded-lg hover:bg-blue-600 transition duration-300 w-full md:w-auto mt-auto text-center">
+                                <p class="text-gray-600 text-sm mb-4 leading-relaxed">Video kampanye untuk membantu dan mendukung perempuan korban KDRT.</p>
+                                <a href="https://www.youtube.com/watch?v=0eahCH0okr0" target="_blank" rel="noopener noreferrer" class="brand-bg-main text-white font-semibold px-6 py-2 rounded-lg hover:bg-blue-600 transition duration-300 w-full md:w-auto mt-auto text-center shadow-md">
                                     Tonton Video
                                 </a>
                             </div>
-                            <!-- Materi Card -->
-                            <div class="flex flex-col bg-gray-50 p-6 rounded-lg shadow border border-gray-200">
+                            <div class="material-card flex flex-col bg-gray-50 p-6 border border-gray-200">
                                 <p class="text-sm font-semibold text-blue-600 mb-1">Situs Pelaporan</p>
                                 <h4 class="font-bold text-gray-800 mb-2">Layanan SAPA 129</h4>
-                                <p class="text-gray-600 text-sm mb-4">Portal resmi pemerintah untuk melaporkan semua jenis kekerasan terhadap perempuan dan anak.</p>
-                                <a href="https://laporsapa129.kemenpppa.go.id" target="_blank" rel="noopener noreferrer" class="brand-bg-main text-white font-semibold px-6 py-2 rounded-lg hover:bg-blue-600 transition duration-300 w-full md:w-auto mt-auto text-center">
+                                <p class="text-gray-600 text-sm mb-4 leading-relaxed">Portal resmi pemerintah untuk melaporkan semua jenis kekerasan.</p>
+                                <a href="https://laporsapa129.kemenpppa.go.id" target="_blank" rel="noopener noreferrer" class="brand-bg-main text-white font-semibold px-6 py-2 rounded-lg hover:bg-blue-600 transition duration-300 w-full md:w-auto mt-auto text-center shadow-md">
                                     Kunjungi Situs
                                 </a>
                             </div>
-                             <!-- Materi Card -->
-                            <div class="flex flex-col bg-gray-50 p-6 rounded-lg shadow border border-gray-200">
+                            <div class="material-card flex flex-col bg-gray-50 p-6 border border-gray-200">
                                 <p class="text-sm font-semibold text-blue-600 mb-1">Artikel</p>
                                 <h4 class="font-bold text-gray-800 mb-2">Melindungi Diri dari KDRT</h4>
-                                <p class="text-gray-600 text-sm mb-4">Panduan praktis untuk mengenali bentuk KDRT dan langkah-langkah aman untuk keluar dari situasi tersebut.</p>
-                                <a href="https://www.alodokter.com/melindungi-diri-dari-kekerasan-dalam-rumah-tangga" target="_blank" rel="noopener noreferrer" class="brand-bg-main text-white font-semibold px-6 py-2 rounded-lg hover:bg-blue-600 transition duration-300 w-full md:w-auto mt-auto text-center">
+                                <p class="text-gray-600 text-sm mb-4 leading-relaxed">Panduan praktis mengenali KDRT dan langkah-langkah aman keluar dari situasi.</p>
+                                <a href="https://www.alodokter.com/melindungi-diri-dari-kekerasan-dalam-rumah-tangga" target="_blank" rel="noopener noreferrer" class="brand-bg-main text-white font-semibold px-6 py-2 rounded-lg hover:bg-blue-600 transition duration-300 w-full md:w-auto mt-auto text-center shadow-md">
                                     Baca Artikel
                                 </a>
                             </div>
-                            <!-- Materi Card -->
-                            <div class="flex flex-col bg-gray-50 p-6 rounded-lg shadow border border-gray-200">
+                            <div class="material-card flex flex-col bg-gray-50 p-6 border border-gray-200">
                                 <p class="text-sm font-semibold text-blue-600 mb-1">Artikel Panduan</p>
                                 <h4 class="font-bold text-gray-800 mb-2">Cara Melaporkan KDRT (Kumparan)</h4>
-                                <p class="text-gray-600 text-sm mb-4">Menjelaskan berbagai jalur pelaporan KDRT secara rinci, mulai dari SAPA 129 hingga ke kantor polisi.</p>
-                                <a href="https://m.kumparan.com/kumparanwoman/cara-melaporkan-kdrt-untuk-mendapat-pertolongan-22kWoXaU9Rc" target="_blank" rel="noopener noreferrer" class="brand-bg-main text-white font-semibold px-6 py-2 rounded-lg hover:bg-blue-600 transition duration-300 w-full md:w-auto mt-auto text-center">
+                                <p class="text-gray-600 text-sm mb-4 leading-relaxed">Menjelaskan berbagai jalur pelaporan KDRT secara rinci.</p>
+                                <a href="https://m.kumparan.com/kumparanwoman/cara-melaporkan-kdrt-untuk-mendapat-pertolongan-22kWoXaU9Rc" target="_blank" rel="noopener noreferrer" class="brand-bg-main text-white font-semibold px-6 py-2 rounded-lg hover:bg-blue-600 transition duration-300 w-full md:w-auto mt-auto text-center shadow-md">
                                     Baca Artikel
                                 </a>
                             </div>
                         </div>
                     </div>
-
-                    <!-- Inses Resources -->
-                    <div class="bg-white rounded-xl shadow-md p-8 border border-slate-200">
+                     <!-- Inses Resources -->
+                     <div class="bg-white rounded-xl shadow-lg p-8 border border-slate-200" data-aos="fade-up">
                         <h3 class="text-2xl font-bold section-title mb-6 text-center md:text-left">Inses (Incest)</h3>
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                            <!-- Materi Card -->
-                            <div class="flex flex-col bg-gray-50 p-6 rounded-lg shadow border border-gray-200">
+                            <div class="material-card flex flex-col bg-gray-50 p-6 border border-gray-200">
                                 <p class="text-sm font-semibold text-blue-600 mb-1">Video Edukasi (YouTube)</p>
                                 <h4 class="font-bold text-gray-800 mb-2">Dialog Psikolog Metro TV: Kasus Inses</h4>
-                                <p class="text-gray-600 text-sm mb-4">Pembahasan kasus inses dengan penjelasan dari psikolog mengenai pentingnya tidak membiarkan pelaku bersembunyi di balik alasan penyakit mental.</p>
-                                <a href="https://www.youtube.com/watch?v=U5-z2DVqTKI" target="_blank" rel="noopener noreferrer" class="brand-bg-main text-white font-semibold px-6 py-2 rounded-lg hover:bg-blue-600 transition duration-300 w-full md:w-auto mt-auto text-center">
+                                <p class="text-gray-600 text-sm mb-4 leading-relaxed">Pembahasan kasus inses dengan penjelasan dari psikolog.</p>
+                                <a href="https://www.youtube.com/watch?v=U5-z2DVqTKI" target="_blank" rel="noopener noreferrer" class="brand-bg-main text-white font-semibold px-6 py-2 rounded-lg hover:bg-blue-600 transition duration-300 w-full md:w-auto mt-auto text-center shadow-md">
                                     Tonton Video
                                 </a>
                             </div>
-                            <!-- Materi Card -->
-                            <div class="flex flex-col bg-gray-50 p-6 rounded-lg shadow border border-gray-200">
+                            <div class="material-card flex flex-col bg-gray-50 p-6 border border-gray-200">
                                 <p class="text-sm font-semibold text-blue-600 mb-1">Artikel</p>
                                 <h4 class="font-bold text-gray-800 mb-2">Inses: Arti, Dampak, dan Hukum</h4>
-                                <p class="text-gray-600 text-sm mb-4">Mengulas arti inses, dampak kesehatan fisik dan psikologis, serta jerat hukum bagi pelaku di Indonesia.</p>
-                                <a href="https://www.halodoc.com/artikel/inses-arti-dampak-dan-hukum-di-indonesia" target="_blank" rel="noopener noreferrer" class="brand-bg-main text-white font-semibold px-6 py-2 rounded-lg hover:bg-blue-600 transition duration-300 w-full md:w-auto mt-auto text-center">
+                                <p class="text-gray-600 text-sm mb-4 leading-relaxed">Mengulas arti, dampak kesehatan, serta jerat hukum inses di Indonesia.</p>
+                                <a href="https://www.halodoc.com/artikel/inses-arti-dampak-dan-hukum-di-indonesia" target="_blank" rel="noopener noreferrer" class="brand-bg-main text-white font-semibold px-6 py-2 rounded-lg hover:bg-blue-600 transition duration-300 w-full md:w-auto mt-auto text-center shadow-md">
                                     Baca Artikel
                                 </a>
                             </div>
-                             <!-- Materi Card -->
-                            <div class="flex flex-col bg-gray-50 p-6 rounded-lg shadow border border-gray-200">
+                            <div class="material-card flex flex-col bg-gray-50 p-6 border border-gray-200">
                                 <p class="text-sm font-semibold text-blue-600 mb-1">Artikel</p>
                                 <h4 class="font-bold text-gray-800 mb-2">Inses dan Bahayanya Bagi Kesehatan</h4>
-                                <p class="text-gray-600 text-sm mb-4">Penjelasan mengenai faktor pemicu inses serta bahayanya bagi kesehatan fisik dan psikologis.</p>
-                                <a href="https://www.alodokter.com/incest-dan-bahayanya-bagi-kesehatan" target="_blank" rel="noopener noreferrer" class="brand-bg-main text-white font-semibold px-6 py-2 rounded-lg hover:bg-blue-600 transition duration-300 w-full md:w-auto mt-auto text-center">
+                                <p class="text-gray-600 text-sm mb-4 leading-relaxed">Penjelasan mengenai faktor pemicu dan bahaya inses bagi kesehatan fisik/psikologis.</p>
+                                <a href="https://www.alodokter.com/incest-dan-bahayanya-bagi-kesehatan" target="_blank" rel="noopener noreferrer" class="brand-bg-main text-white font-semibold px-6 py-2 rounded-lg hover:bg-blue-600 transition duration-300 w-full md:w-auto mt-auto text-center shadow-md">
                                     Baca Artikel
                                 </a>
                             </div>
-                            <!-- Materi Card -->
-                            <div class="flex flex-col bg-gray-50 p-6 rounded-lg shadow border border-gray-200">
+                            <div class="material-card flex flex-col bg-gray-50 p-6 border border-gray-200">
                                 <p class="text-sm font-semibold text-blue-600 mb-1">Video Diskusi (YouTube)</p>
                                 <h4 class="font-bold text-gray-800 mb-2">Grup Inses (Psikolog Forensik)</h4>
-                                <p class="text-gray-600 text-sm mb-4">Diskusi mendalam bersama psikolog forensik mengenai fenomena dan bahaya grup 'fantasi sedarah'.</p>
-                                <a href="https://www.youtube.com/watch?v=t_rd6WZ9owQ" target="_blank" rel="noopener noreferrer" class="brand-bg-main text-white font-semibold px-6 py-2 rounded-lg hover:bg-blue-600 transition duration-300 w-full md:w-auto mt-auto text-center">
+                                <p class="text-gray-600 text-sm mb-4 leading-relaxed">Diskusi mendalam mengenai fenomena dan bahaya grup 'fantasi sedarah'.</p>
+                                <a href="https://www.youtube.com/watch?v=t_rd6WZ9owQ" target="_blank" rel="noopener noreferrer" class="brand-bg-main text-white font-semibold px-6 py-2 rounded-lg hover:bg-blue-600 transition duration-300 w-full md:w-auto mt-auto text-center shadow-md">
                                     Tonton Video
                                 </a>
                             </div>
                         </div>
                     </div>
-
-                    <!-- Isu Sosial Lainnya Resources -->
-                    <div class="bg-white rounded-xl shadow-md p-8 border border-slate-200">
+                     <!-- Isu Sosial Lainnya Resources -->
+                     <div class="bg-white rounded-xl shadow-lg p-8 border border-slate-200" data-aos="fade-up">
                         <h3 class="text-2xl font-bold section-title mb-6 text-center md:text-left">Isu Sosial Lainnya</h3>
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                            <!-- Materi Card -->
-                            <div class="flex flex-col bg-gray-50 p-6 rounded-lg shadow border border-gray-200">
+                            <div class="material-card flex flex-col bg-gray-50 p-6 border border-gray-200">
                                 <p class="text-sm font-semibold text-blue-600 mb-1">Materi Internal (PDF)</p>
                                 <h4 class="font-bold text-gray-800 mb-2">Bahaya & Sanksi Rokok Ilegal</h4>
-                                <p class="text-gray-600 text-sm mb-4">Informasi mengenai bahaya, dampak, serta sanksi hukum terkait peredaran rokok ilegal.</p>
-                                <a href="https://drive.google.com/file/d/18Fb8OAK5fqhADVemnUyCAKueJTQlSl4f/view?usp=drive_link" target="_blank" rel="noopener noreferrer" class="brand-bg-main text-white font-semibold px-6 py-2 rounded-lg hover:bg-blue-600 transition duration-300 w-full md:w-auto mt-auto text-center">
+                                <p class="text-gray-600 text-sm mb-4 leading-relaxed">Informasi mengenai bahaya, dampak, serta sanksi hukum peredaran rokok ilegal.</p>
+                                <a href="https://drive.google.com/file/d/18Fb8OAK5fqhADVemnUyCAKueJTQlSl4f/view?usp=drive_link" target="_blank" rel="noopener noreferrer" class="brand-bg-main text-white font-semibold px-6 py-2 rounded-lg hover:bg-blue-600 transition duration-300 w-full md:w-auto mt-auto text-center shadow-md">
                                     Baca Materi
                                 </a>
                             </div>
-                            <!-- Materi Card -->
-                            <div class="flex flex-col bg-gray-50 p-6 rounded-lg shadow border border-gray-200">
+                            <div class="material-card flex flex-col bg-gray-50 p-6 border border-gray-200">
                                 <p class="text-sm font-semibold text-blue-600 mb-1">Materi Internal (PDF)</p>
                                 <h4 class="font-bold text-gray-800 mb-2">Kenakalan Remaja - Remaja Hebat</h4>
-                                <p class="text-gray-600 text-sm mb-4">Membahas tentang bagaimana menjadi remaja yang hebat tanpa terjerumus dalam kenakalan.</p>
-                                <a href="https://drive.google.com/file/d/1bUCm2GTkAOot1Z-GcsybgRvJaHrSrcng/view?usp=drive_link" target="_blank" rel="noopener noreferrer" class="brand-bg-main text-white font-semibold px-6 py-2 rounded-lg hover:bg-blue-600 transition duration-300 w-full md:w-auto mt-auto text-center">
+                                <p class="text-gray-600 text-sm mb-4 leading-relaxed">Membahas cara menjadi remaja hebat tanpa terjerumus kenakalan.</p>
+                                <a href="https://drive.google.com/file/d/1bUCm2GTkAOot1Z-GcsybgRvJaHrSrcng/view?usp=drive_link" target="_blank" rel="noopener noreferrer" class="brand-bg-main text-white font-semibold px-6 py-2 rounded-lg hover:bg-blue-600 transition duration-300 w-full md:w-auto mt-auto text-center shadow-md">
                                     Baca Materi
                                 </a>
                             </div>
@@ -569,84 +683,73 @@
 
         <!-- Bantuan Section -->
         <section id="bantuan" class="py-20 brand-bg-secondary">
-            <div class="container mx-auto px-6">
-                <div class="text-center mb-12">
+             <div class="container mx-auto px-6">
+                <div class="text-center mb-12" data-aos="fade-up">
                     <h2 class="text-3xl md:text-4xl font-bold brand-text-secondary">Butuh Bantuan? Hubungi Kami.</h2>
-                    <p class="brand-text-secondary opacity-80 mt-2 max-w-2xl mx-auto">Jangan ragu untuk mencari pertolongan. Berikut adalah daftar kontak lembaga dan organisasi yang siap membantu Anda. Klik tombol untuk menyalin nomor.</p>
+                    <p class="brand-text-secondary opacity-80 mt-2 max-w-2xl mx-auto leading-relaxed tracking-wide">Jangan ragu untuk mencari pertolongan. Berikut adalah daftar kontak lembaga dan organisasi yang siap membantu Anda. Klik tombol untuk menyalin nomor.</p>
                 </div>
 
                 <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
-                    <!-- Contact Card: JPPA -->
-                    <div class="bg-white p-6 rounded-lg shadow-lg text-center flex flex-col justify-between">
+                    <div class="contact-card bg-white p-6 text-center flex flex-col justify-between" data-aos="fade-up" data-aos-delay="100">
                          <div>
                             <h3 class="font-bold text-lg section-title mb-2">JPPA (Jaringan Peduli Perempuan & Anak)</h3>
-                            <p class="text-gray-600 text-sm mb-4">Pendampingan korban kekerasan perempuan dan anak.</p>
+                            <p class="text-gray-600 text-sm mb-4 leading-relaxed">Pendampingan korban kekerasan perempuan dan anak.</p>
                         </div>
-                        <button data-number="088228961516" class="copy-button brand-bg-main text-white font-semibold px-6 py-2 rounded-lg hover:bg-blue-600 transition duration-300 inline-block w-full sm:w-auto mt-auto">
+                        <button data-number="088228961516" class="copy-button brand-bg-main text-white font-semibold px-6 py-2 rounded-lg hover:bg-blue-600 transition duration-300 inline-block w-full sm:w-auto mt-auto shadow-md">
                             Salin No - 088228961516
                         </button>
                     </div>
-
-                    <!-- Contact Card: Garpu Perak -->
-                    <div class="bg-white p-6 rounded-lg shadow-lg text-center flex flex-col justify-between">
+                    <div class="contact-card bg-white p-6 text-center flex flex-col justify-between" data-aos="fade-up" data-aos-delay="200">
                         <div>
                             <h3 class="font-bold text-lg section-title mb-2">Garpu Perak</h3>
-                            <p class="text-gray-600 text-sm mb-4">Bantuan hukum dan advokasi untuk masyarakat.</p>
+                            <p class="text-gray-600 text-sm mb-4 leading-relaxed">Bantuan hukum dan advokasi untuk masyarakat.</p>
                         </div>
-                        <button data-number="08562706408" class="copy-button brand-bg-main text-white font-semibold px-6 py-2 rounded-lg hover:bg-blue-600 transition duration-300 inline-block w-full sm:w-auto mt-auto">
+                        <button data-number="08562706408" class="copy-button brand-bg-main text-white font-semibold px-6 py-2 rounded-lg hover:bg-blue-600 transition duration-300 inline-block w-full sm:w-auto mt-auto shadow-md">
                             Salin No - 08562706408
                         </button>
                     </div>
-                    
-                    <!-- Contact Card: Polsek -->
-                    <div class="bg-white p-6 rounded-lg shadow-lg text-center flex flex-col justify-between">
+                    <div class="contact-card bg-white p-6 text-center flex flex-col justify-between" data-aos="fade-up" data-aos-delay="300">
                         <div>
                             <h3 class="font-bold text-lg section-title mb-2">Polsek Semarang Timur</h3>
-                            <p class="text-gray-600 text-sm mb-4">Layanan pengaduan dan perlindungan kepolisian.</p>
+                            <p class="text-gray-600 text-sm mb-4 leading-relaxed">Layanan pengaduan dan perlindungan kepolisian.</p>
                         </div>
                         <div class="mt-auto space-y-2">
-                             <button data-number="0246715632" class="copy-button brand-bg-main text-white font-semibold px-6 py-2 rounded-lg hover:bg-blue-600 transition duration-300 w-full">
+                             <button data-number="0246715632" class="copy-button brand-bg-main text-white font-semibold px-6 py-2 rounded-lg hover:bg-blue-600 transition duration-300 w-full shadow-md">
                                 Salin No - (024) 6715632
                             </button>
-                            <a href="https://restabessmg.jateng.polri.go.id/polsek-semarang-timur/" target="_blank" rel="noopener noreferrer" class="website-button font-semibold px-6 py-2 rounded-lg hover:bg-blue-50 transition duration-300 w-full">
+                            <a href="https://restabessmg.jateng.polri.go.id/polsek-semarang-timur/" target="_blank" rel="noopener noreferrer" class="website-button font-semibold px-6 py-2 rounded-lg hover:bg-blue-50 transition duration-300 w-full shadow-md">
                                 Kunjungi Website
                             </a>
                         </div>
                     </div>
-                    
-                    <!-- Contact Card: PSM -->
-                    <div class="bg-white p-6 rounded-lg shadow-lg text-center flex flex-col justify-between">
+                    <div class="contact-card bg-white p-6 text-center flex flex-col justify-between" data-aos="fade-up" data-aos-delay="400">
                         <div>
                             <h3 class="font-bold text-lg section-title mb-2">Pekerja Sosial Masyarakat</h3>
-                            <p class="text-gray-600 text-sm mb-4">Konseling dan bantuan sosial di tingkat kelurahan.</p>
+                            <p class="text-gray-600 text-sm mb-4 leading-relaxed">Konseling dan bantuan sosial di tingkat kelurahan.</p>
                         </div>
-                        <button data-number="085101984212" class="copy-button brand-bg-main text-white font-semibold px-6 py-2 rounded-lg hover:bg-blue-600 transition duration-300 inline-block w-full sm:w-auto mt-auto">
+                        <button data-number="085101984212" class="copy-button brand-bg-main text-white font-semibold px-6 py-2 rounded-lg hover:bg-blue-600 transition duration-300 inline-block w-full sm:w-auto mt-auto shadow-md">
                            Salin No - 085101984212
                         </button>
                     </div>
-
-                    <!-- Contact Card: Karang Taruna -->
-                    <div class="bg-white p-6 rounded-lg shadow-lg text-center flex flex-col justify-between">
+                    <div class="contact-card bg-white p-6 text-center flex flex-col justify-between" data-aos="fade-up" data-aos-delay="500">
                          <div>
                             <h3 class="font-bold text-lg section-title mb-2">Karang Taruna</h3>
-                            <p class="text-gray-600 text-sm mb-4">Wadah pengembangan generasi muda dan sosial.</p>
+                            <p class="text-gray-600 text-sm mb-4 leading-relaxed">Wadah pengembangan generasi muda dan sosial.</p>
                         </div>
-                        <button data-number="081325912001" class="copy-button brand-bg-main text-white font-semibold px-6 py-2 rounded-lg hover:bg-blue-600 transition duration-300 inline-block w-full sm:w-auto mt-auto">
+                        <button data-number="081325912001" class="copy-button brand-bg-main text-white font-semibold px-6 py-2 rounded-lg hover:bg-blue-600 transition duration-300 inline-block w-full sm:w-auto mt-auto shadow-md">
                            Salin No - 081325912001
                         </button>
                     </div>
-                    
-                    <!-- Contact Card: Dinsos -->
-                     <div class="bg-white p-6 rounded-lg shadow-lg text-center flex flex-col justify-between">
+                    <div class="contact-card bg-white p-6 text-center flex flex-col justify-between" data-aos="fade-up" data-aos-delay="600">
                          <div>
                             <h3 class="font-bold text-lg section-title mb-2">Dinas Sosial Kota Semarang</h3>
-                            <p class="text-gray-600 text-sm mb-4">Layanan sosial terpadu dari pemerintah kota.</p>
+                            <p class="text-gray-600 text-sm mb-4 leading-relaxed">Layanan sosial terpadu dari pemerintah kota.</p>
                          </div>
                          <div class="mt-auto space-y-2">
-                             <button data-number="0243547528" class="copy-button brand-bg-main text-white font-semibold px-6 py-2 rounded-lg hover:bg-blue-600 transition duration-300 w-full">
+                             <button data-number="0243547528" class="copy-button brand-bg-main text-white font-semibold px-6 py-2 rounded-lg hover:bg-blue-600 transition duration-300 w-full shadow-md">
                                 Salin No - (024) 3547528
                             </button>
-                             <a href="https://dinsos.semarangkota.go.id/" target="_blank" rel="noopener noreferrer" class="website-button font-semibold px-6 py-2 rounded-lg hover:bg-blue-50 transition duration-300 w-full">
+                             <a href="https://dinsos.semarangkota.go.id/" target="_blank" rel="noopener noreferrer" class="website-button font-semibold px-6 py-2 rounded-lg hover:bg-blue-50 transition duration-300 w-full shadow-md">
                                 Kunjungi Website
                             </a>
                         </div>
@@ -657,80 +760,75 @@
 
         <!-- Lokasi Bantuan Section -->
         <section id="lokasi" class="py-20 bg-white">
-            <div class="container mx-auto px-6">
-                <div class="text-center mb-12">
+             <div class="container mx-auto px-6">
+                <div class="text-center mb-12" data-aos="fade-up">
                     <h2 class="text-3xl md:text-4xl font-bold section-title">Lokasi Bantuan Terdekat</h2>
-                    <p class="text-gray-600 mt-2 max-w-2xl mx-auto">Temukan lokasi fisik lembaga bantuan di sekitar Kecamatan Semarang Timur.</p>
+                    <p class="text-gray-600 mt-2 max-w-2xl mx-auto leading-relaxed tracking-wide">Temukan lokasi fisik lembaga bantuan di sekitar Kecamatan Semarang Timur.</p>
                 </div>
-                <!-- Changed to single column, centered layout -->
                 <div class="grid grid-cols-1 gap-12 max-w-2xl mx-auto">
-                    <!-- Map 1: Kantor Kecamatan (PSM, JPPA, etc.) -->
-                    <div class="flex flex-col items-center">
+                    <div class="flex flex-col items-center" data-aos="fade-up" data-aos-delay="100">
                         <h3 class="text-lg font-semibold text-center section-title mb-4">Kantor Kecamatan (Lantai 2) <br><small>(PSM, JPPA, Karang Taruna, Garpu Perak)</small></h3>
-                        <div class="map-container shadow-lg w-full">
+                        <div class="map-container shadow-xl w-full">
                             <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3960.203678536067!2d110.43912607499703!3d-6.98522209301594!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2e708cdd6240277d%3A0xe6a5d46a81335091!2sKantor%20Kecamatan%20Semarang%20Timur!5e0!3m2!1sen!2sid!4v1729570141697!5m2!1sen!2sid" 
                                     allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
                         </div>
-                         <a href="https://maps.app.goo.gl/nV2goiPANVuPRchf6" target="_blank" rel="noopener noreferrer" class="text-center mt-3 text-blue-500 hover:text-blue-600 text-sm">Lihat di Google Maps</a>
+                         <a href="https://maps.app.goo.gl/nV2goiPANVuPRchf6" target="_blank" rel="noopener noreferrer" class="text-center mt-3 text-blue-500 hover:text-blue-600 text-sm font-medium">Lihat di Google Maps</a>
                     </div>
-                    <!-- Map 2: Polsek Semarang Timur -->
-                     <div class="flex flex-col items-center">
+                    <div class="flex flex-col items-center" data-aos="fade-up" data-aos-delay="200">
                          <h3 class="text-lg font-semibold text-center section-title mb-4">Polsek Semarang Timur</h3>
-                        <div class="map-container shadow-lg w-full">
+                        <div class="map-container shadow-xl w-full">
                             <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3960.1064379565516!2d110.43777087499719!3d-6.996913693004358!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2e708c909cd35e69%3A0xf69c9ff4c670a316!2sPolsek%20Semarang%20Timur!5e0!3m2!1sen!2sid!4v1729570258273!5m2!1sen!2sid" 
                                      allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
                         </div>
-                         <a href="https://maps.app.goo.gl/WjYTfNQe4etUAyHC9" target="_blank" rel="noopener noreferrer" class="text-center mt-3 text-blue-500 hover:text-blue-600 text-sm">Lihat di Google Maps</a>
+                         <a href="https://maps.app.goo.gl/WjYTfNQe4etUAyHC9" target="_blank" rel="noopener noreferrer" class="text-center mt-3 text-blue-500 hover:text-blue-600 text-sm font-medium">Lihat di Google Maps</a>
                     </div>
-                     <!-- Map 3: Dinas Sosial -->
-                     <div class="flex flex-col items-center">
+                    <div class="flex flex-col items-center" data-aos="fade-up" data-aos-delay="300">
                          <h3 class="text-lg font-semibold text-center section-title mb-4">Dinas Sosial Kota Semarang</h3>
-                        <div class="map-container shadow-lg w-full">
+                        <div class="map-container shadow-xl w-full">
                             <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3960.316447230495!2d110.4075114749969!3d-6.971661693029147!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2e708b7636e08881%3A0x86b356d61a0e104e!2sDinas%20Sosial%20Kota%20Semarang!5e0!3m2!1sen!2sid!4v1729570318469!5m2!1sen!2sid" 
                                     allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
                         </div>
-                         <a href="https://maps.app.goo.gl/wNFE2y2nYD3H7Ty17" target="_blank" rel="noopener noreferrer" class="text-center mt-3 text-blue-500 hover:text-blue-600 text-sm">Lihat di Google Maps</a>
+                         <a href="https://maps.app.goo.gl/wNFE2y2nYD3H7Ty17" target="_blank" rel="noopener noreferrer" class="text-center mt-3 text-blue-500 hover:text-blue-600 text-sm font-medium">Lihat di Google Maps</a>
                     </div>
                 </div>
             </div>
         </section>
 
 
-        <!-- Tentang Proyek Section (No longer in Nav) -->
+        <!-- Tentang Proyek Section -->
         <section id="tentang" class="py-20 bg-white">
-            <div class="container mx-auto px-6 text-center max-w-5xl">
+             <div class="container mx-auto px-6 text-center max-w-5xl" data-aos="fade-up">
                 <h2 class="text-3xl md:text-4xl font-bold section-title">Tentang Portal ASA</h2>
-                <p class="text-gray-600 mt-4 leading-relaxed max-w-4xl mx-auto">
+                <p class="text-gray-600 mt-4 leading-relaxed tracking-wide max-w-4xl mx-auto">
                     Portal ASA (Aksi Sosial Preventif) adalah sebuah inisiatif yang lahir dari Program Kerja Individu Kuliah Kerja Nyata (KKN) yang dikembangkan oleh <strong>Abilawa Andamari Supriyadi</strong> dari Program Studi <strong>Teknik Informatika, Universitas Semarang</strong>. Website ini dirancang sebagai sumber informasi terpusat bagi warga Kecamatan Semarang Timur untuk meningkatkan kesadaran terhadap isu-isu sosial dan menyediakan akses mudah ke lembaga bantuan.
                 </p>
                 
                 <div class="mt-12">
                     <h3 class="text-2xl font-bold text-gray-700 mb-8">Penyelenggara</h3>
                     <div class="flex justify-center items-center gap-8 md:gap-12 flex-wrap">
-                        <img src="https://github.com/ChocoToppy/PortalASA/blob/master/assets/images/Logo%20USM.png?raw=true" alt="Logo Universitas Semarang" class="h-24 object-contain" title="Universitas Semarang">
-                        <img src="https://github.com/ChocoToppy/PortalASA/blob/master/assets/images/Logo%20LPPM.png?raw=true" alt="Logo LPPM USM" class="w-56 object-contain" title="LPPM Universitas Semarang">
-                        <img src="https://github.com/ChocoToppy/PortalASA/blob/master/assets/images/Logo%20Korcam%20Semarang%20Timur.jpeg?raw=true" alt="Logo KKN Korcam Semarang Timur" class="h-24 object-contain" title="KKN USM XXVII 2025 Korcam Semarang Timur">
+                        <img src="https://github.com/ChocoToppy/PortalASA/blob/master/assets/images/Logo%20USM.png?raw=true" alt="Logo Universitas Semarang" class="h-24 object-contain" title="Universitas Semarang" loading="lazy">
+                        <img src="https://github.com/ChocoToppy/PortalASA/blob/master/assets/images/Logo%20LPPM.png?raw=true" alt="Logo LPPM USM" class="w-56 object-contain" title="LPPM Universitas Semarang" loading="lazy">
+                        <img src="https://github.com/ChocoToppy/PortalASA/blob/master/assets/images/Logo%20Korcam%20Semarang%20Timur.jpeg?raw=true" alt="Logo KKN Korcam Semarang Timur" class="h-24 object-contain" title="KKN USM XXVII 2025 Korcam Semarang Timur" loading="lazy">
                     </div>
                 </div>
 
                 <div class="mt-16">
                     <h3 class="text-2xl font-bold text-gray-700 mb-8">Bekerja Sama Dengan</h3>
                     <div class="flex justify-center items-center gap-6 md:gap-10 flex-wrap">
-                         <!-- Partner Logos -->
                         <div class="flex flex-col items-center justify-start w-32 h-28">
-                            <img src="https://github.com/ChocoToppy/PortalASA/blob/master/assets/images/Pekerja%20Sosial%20Masyarakat.png?raw=true" alt="Logo PSM" class="h-20 object-contain">
+                            <img src="https://github.com/ChocoToppy/PortalASA/blob/master/assets/images/Pekerja%20Sosial%20Masyarakat.png?raw=true" alt="Logo PSM" class="h-20 object-contain" loading="lazy">
                             <p class="mt-2 text-sm font-semibold text-gray-700 text-center">PSM</p>
                         </div>
                         <div class="flex flex-col items-center justify-start w-32 h-28">
-                            <img src="https://github.com/ChocoToppy/PortalASA/blob/master/assets/images/Karang%20Taruna.png?raw=true" alt="Logo Karang Taruna" class="h-20 object-contain">
+                            <img src="https://github.com/ChocoToppy/PortalASA/blob/master/assets/images/Karang%20Taruna.png?raw=true" alt="Logo Karang Taruna" class="h-20 object-contain" loading="lazy">
                             <p class="mt-2 text-sm font-semibold text-gray-700 text-center">Karang Taruna</p>
                         </div>
                         <div class="flex flex-col items-center justify-start w-32 h-28">
-                            <img src="https://github.com/ChocoToppy/PortalASA/blob/master/assets/images/JPPA.jpg?raw=true" alt="Logo JPPA" class="h-20 object-contain rounded-md">
+                            <img src="https://github.com/ChocoToppy/PortalASA/blob/master/assets/images/JPPA.jpg?raw=true" alt="Logo JPPA" class="h-20 object-contain rounded-md" loading="lazy">
                             <p class="mt-2 text-sm font-semibold text-gray-700 text-center">JPPA</p>
                         </div>
                         <div class="flex flex-col items-center justify-start w-32 h-28">
-                            <img src="https://github.com/ChocoToppy/PortalASA/blob/master/assets/images/Garpu%20Perak.png?raw=true" alt="Logo Garpu Perak" class="h-20 object-contain">
+                            <img src="https://github.com/ChocoToppy/PortalASA/blob/master/assets/images/Garpu%20Perak.png?raw=true" alt="Logo Garpu Perak" class="h-20 object-contain" loading="lazy">
                             <p class="mt-2 text-sm font-semibold text-gray-700 text-center">Garpu Perak</p>
                         </div>
                     </div>
@@ -740,69 +838,117 @@
     </main>
 
     <!-- Footer -->
-    <footer class="bg-gray-800 text-white py-8">
+    <footer class="footer-gradient text-white py-8">
         <div class="container mx-auto px-6 text-center">
-            <div class="mb-4">
-                <span class="text-gray-400 text-sm mr-2">Bagikan halaman ini:</span>
-                <a href="#" id="share-wa" class="share-button share-wa" target="_blank" rel="noopener noreferrer">
-                     <svg viewBox="0 0 24 24"><path d="M12.04 2C6.58 2 2.13 6.45 2.13 11.91C2.13 13.66 2.59 15.31 3.4 16.78L2.1 21.9L7.43 20.61C8.84 21.31 10.39 21.72 12.04 21.72C17.5 21.72 21.95 17.27 21.95 11.81C21.95 6.35 17.5 2 12.04 2M12.04 20.13C10.63 20.13 9.27 19.78 8.08 19.14L7.72 18.93L4.85 19.7L5.69 16.96L5.47 16.6C4.73 15.35 4.31 13.88 4.31 12.31C4.31 7.36 7.77 3.6 12.04 3.6C16.3 3.6 19.76 7.36 19.76 12.21C19.76 17.07 16.31 20.13 12.04 20.13M17.39 14.65C17.16 14.54 16.05 14 15.82 13.91C15.59 13.82 15.42 13.78 15.26 14C15.1 14.22 14.63 14.71 14.49 14.87C14.34 15.03 14.19 15.04 13.96 14.95C13.73 14.86 12.92 14.6 11.93 13.77C11.16 13.11 10.65 12.3 10.51 12.08C10.37 11.86 10.48 11.75 10.59 11.64C10.69 11.53 10.82 11.37 10.93 11.24C11.04 11.11 11.08 11 11.16 10.87C11.24 10.74 11.19 10.61 11.13 10.5C11.07 10.39 10.63 9.28 10.46 8.87C10.29 8.46 10.12 8.5 9.99 8.49H9.57C9.4 8.49 9.1 8.54 8.87 8.76C8.64 8.98 8.08 9.48 8.08 10.53C8.08 11.58 8.89 12.57 9.01 12.73C9.13 12.89 10.62 15.26 12.96 16.19C13.53 16.42 13.94 16.57 14.27 16.68C14.8 16.85 15.22 16.82 15.54 16.76C15.91 16.69 16.85 16.14 17.05 15.58C17.25 15.02 17.25 14.58 17.19 14.49C17.13 14.4 16.91 14.3 17.39 14.65Z"></path></svg>
-                    WhatsApp
-                </a>
-                <a href="#" id="share-fb" class="share-button share-fb" target="_blank" rel="noopener noreferrer">
-                     <svg viewBox="0 0 24 24"><path d="M14 13.5H16.5L17.5 9.5H14V7.5C14 6.47 14 5.5 16 5.5H17.5V2.14C17.174 2.097 15.943 2 14.643 2C11.928 2 10 3.657 10 6.7V9.5H7V13.5H10V22H14V13.5Z"></path></svg>
-                    Facebook
-                </a>
+             <!-- Adjusted layout for share buttons -->
+            <div class="mb-4 flex flex-col sm:flex-row justify-center items-center space-y-2 sm:space-y-0 sm:space-x-2"> 
+                <span class="text-gray-300 text-sm mr-2 mb-2 sm:mb-0">Bagikan halaman ini:</span>
+                <div class="flex flex-col sm:flex-row items-center">
+                    <a href="#" id="share-wa" class="share-button share-wa" target="_blank" rel="noopener noreferrer">
+                         <svg viewBox="0 0 24 24"><path d="M12.04 2C6.58 2 2.13 6.45 2.13 11.91C2.13 13.66 2.59 15.31 3.4 16.78L2.1 21.9L7.43 20.61C8.84 21.31 10.39 21.72 12.04 21.72C17.5 21.72 21.95 17.27 21.95 11.81C21.95 6.35 17.5 2 12.04 2M12.04 20.13C10.63 20.13 9.27 19.78 8.08 19.14L7.72 18.93L4.85 19.7L5.69 16.96L5.47 16.6C4.73 15.35 4.31 13.88 4.31 12.31C4.31 7.36 7.77 3.6 12.04 3.6C16.3 3.6 19.76 7.36 19.76 12.21C19.76 17.07 16.31 20.13 12.04 20.13M17.39 14.65C17.16 14.54 16.05 14 15.82 13.91C15.59 13.82 15.42 13.78 15.26 14C15.1 14.22 14.63 14.71 14.49 14.87C14.34 15.03 14.19 15.04 13.96 14.95C13.73 14.86 12.92 14.6 11.93 13.77C11.16 13.11 10.65 12.3 10.51 12.08C10.37 11.86 10.48 11.75 10.59 11.64C10.69 11.53 10.82 11.37 10.93 11.24C11.04 11.11 11.08 11 11.16 10.87C11.24 10.74 11.19 10.61 11.13 10.5C11.07 10.39 10.63 9.28 10.46 8.87C10.29 8.46 10.12 8.5 9.99 8.49H9.57C9.4 8.49 9.1 8.54 8.87 8.76C8.64 8.98 8.08 9.48 8.08 10.53C8.08 11.58 8.89 12.57 9.01 12.73C9.13 12.89 10.62 15.26 12.96 16.19C13.53 16.42 13.94 16.57 14.27 16.68C14.8 16.85 15.22 16.82 15.54 16.76C15.91 16.69 16.85 16.14 17.05 15.58C17.25 15.02 17.25 14.58 17.19 14.49C17.13 14.4 16.91 14.3 17.39 14.65Z"></path></svg>
+                        WhatsApp
+                    </a>
+                    <a href="#" id="share-fb" class="share-button share-fb" target="_blank" rel="noopener noreferrer">
+                         <svg viewBox="0 0 24 24"><path d="M14 13.5H16.5L17.5 9.5H14V7.5C14 6.47 14 5.5 16 5.5H17.5V2.14C17.174 2.097 15.943 2 14.643 2C11.928 2 10 3.657 10 6.7V9.5H7V13.5H10V22H14V13.5Z"></path></svg>
+                        Facebook
+                    </a>
+                </div>
             </div>
-            <p class="text-gray-400 text-sm">&copy; 2025 Portal ASA Semarang Timur.</p>
+            <p class="text-gray-400 text-sm mt-4">&copy; 2025 Portal ASA Semarang Timur.</p>
             <p class="mt-1 text-gray-400 text-sm">Dikembangkan oleh Abilawa Andamari Supriyadi untuk Kebaikan Bersama.</p>
         </div>
     </footer>
     
-    <!-- Scroll to top button -->
     <button id="to-top-button" title="Go To Top"
-        class="hidden fixed z-50 bottom-10 right-10 p-4 border-0 w-14 h-14 rounded-full shadow-md bg-blue-500 hover:bg-blue-600 text-white text-lg font-semibold transition-all duration-300">
+        class="hidden fixed z-50 bottom-10 right-10 p-4 border-0 w-14 h-14 rounded-full shadow-lg bg-blue-500 hover:bg-blue-600 text-white text-lg font-semibold transition-all duration-300 transform hover:scale-110">
         &uarr;
     </button>
 
-
+    <!-- AOS Script -->
+    <script src="https://unpkg.com/aos@2.3.4/dist/aos.js"></script>
     <script>
         document.addEventListener('DOMContentLoaded', function () {
-            const currentUrl = window.location.href; // Get current page URL
-            const pageTitle = document.title; // Get page title
+            // Initialize AOS
+            AOS.init({
+                duration: 800, 
+                once: true, 
+                offset: 50 
+            });
+
+            // Navbar Scroll Effect
+            const header = document.getElementById('header');
+            if (header) { // Check if header exists
+                 // Set initial state based on scroll position on load
+                 if (window.scrollY > 50) { 
+                    header.classList.add('scrolled');
+                 } else {
+                     header.classList.remove('scrolled');
+                 }
+                 // Add scroll listener
+                 window.addEventListener('scroll', () => {
+                    if (window.scrollY > 50) { 
+                        header.classList.add('scrolled');
+                    } else {
+                        header.classList.remove('scrolled');
+                    }
+                });
+            }
+
+
+            // --- Existing JS ---
+            const currentUrl = window.location.href; 
+            const pageTitle = document.title; 
             const shareText = encodeURIComponent(`Lihat Portal ASA - Informasi & Bantuan Isu Sosial Semarang Timur: ${currentUrl}`);
 
             // Update Share Button Links
             const shareWaButton = document.getElementById('share-wa');
-            shareWaButton.href = `https://wa.me/?text=${shareText}`;
+            if (shareWaButton) { 
+                shareWaButton.href = `https://wa.me/?text=${shareText}`;
+            } else {
+                console.error("Element with ID 'share-wa' not found."); 
+            }
             
             const shareFbButton = document.getElementById('share-fb');
-            shareFbButton.href = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(currentUrl)}`;
-
+             if (shareFbButton) { 
+                shareFbButton.href = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(currentUrl)}`;
+             } else {
+                 console.error("Element with ID 'share-fb' not found."); 
+             }
 
             // Mobile Menu Toggle
             const mobileMenuButton = document.getElementById('mobile-menu-button');
             const mobileMenu = document.getElementById('mobile-menu');
-            mobileMenuButton.addEventListener('click', () => {
-                mobileMenu.classList.toggle('hidden');
-            });
+             if (mobileMenuButton && mobileMenu) { 
+                mobileMenuButton.addEventListener('click', () => {
+                    mobileMenu.classList.toggle('hidden');
+                });
+            }
             
             // Close mobile menu when a link is clicked
-            document.querySelectorAll('#mobile-menu a, nav a').forEach(link => { // Close on desktop nav too for consistency
+            document.querySelectorAll('#mobile-menu a, nav a').forEach(link => { 
                 link.addEventListener('click', () => {
-                    mobileMenu.classList.add('hidden'); // Ensure mobile menu always closes
+                     if (mobileMenu) { 
+                        mobileMenu.classList.add('hidden'); 
+                     }
                 });
             });
 
             // Accordion Toggle
             const accordionToggles = document.querySelectorAll('.accordion-toggle');
             accordionToggles.forEach(toggle => {
-                toggle.addEventListener('click', () => {
-                    const content = toggle.parentElement.nextElementSibling;
+                const triggerArea = toggle.closest('.isu-card-trigger-area'); 
+                if (!triggerArea) return; 
+                const content = triggerArea.nextElementSibling; 
+                if (!content || !content.classList.contains('accordion-content')) return; 
+
+                triggerArea.addEventListener('click', () => { 
+                    const isOpen = content.classList.contains('open');
                     content.classList.toggle('open');
+                    const button = triggerArea.querySelector('.accordion-toggle'); 
                     if (content.classList.contains('open')) {
-                         toggle.innerHTML = 'Lebih sedikit &larr;';
+                         button.innerHTML = 'Lebih sedikit &larr;';
                     } else {
-                        toggle.innerHTML = 'Selengkapnya &rarr;';
+                        button.innerHTML = 'Selengkapnya &rarr;';
                     }
                 });
             });
@@ -810,12 +956,12 @@
             // Copy to Clipboard
             const copyButtons = document.querySelectorAll('.copy-button');
             copyButtons.forEach(button => {
-                const originalText = button.innerHTML; // Simpan teks asli di sini
+                const originalText = button.innerHTML; 
                 
                 button.addEventListener('click', () => {
                     const numberToCopy = button.dataset.number;
-                    
-                    // Use execCommand for compatibility
+                    if (!numberToCopy) return; 
+
                     const textarea = document.createElement('textarea');
                     textarea.value = numberToCopy;
                     textarea.style.position = 'absolute';
@@ -827,46 +973,58 @@
                         document.execCommand('copy');
                         button.innerHTML = 'Nomor Tersalin!';
                         button.classList.add('bg-green-500', 'hover:bg-green-600');
-                        button.classList.remove('brand-bg-main', 'hover:bg-blue-600');
+                        button.classList.remove('brand-bg-main', 'hover:bg-blue-600', 'bg-red-500', 'hover:bg-red-600'); 
+                        if (button.classList.contains('website-button')) {
+                            button.classList.remove('website-button'); 
+                        }
                     } catch (err) {
                         console.error('Gagal menyalin nomor:', err);
                         button.innerHTML = 'Gagal Menyalin';
-                         // Optionally revert faster on error
                         setTimeout(() => {
                             button.innerHTML = originalText;
-                            button.classList.remove('bg-green-500', 'hover:bg-green-600'); // Ensure removal even on error path
-                            button.classList.add('brand-bg-main', 'hover:bg-blue-600');
-                         }, 1500); // Shorter timeout for error message
-                         return; // Prevent the normal timeout from running
+                            button.classList.remove('bg-green-500', 'hover:bg-green-600'); 
+                            if (originalText.includes('Polsek')) {
+                                 button.classList.add('bg-red-500', 'hover:bg-red-600');
+                            } else {
+                                button.classList.add('brand-bg-main', 'hover:bg-blue-600');
+                            }
+                         }, 1500); 
+                         return; 
                     } finally {
-                        document.body.removeChild(textarea); // Ensure textarea is removed
+                        document.body.removeChild(textarea); 
                     }
 
                     // Revert text after 2 seconds only on success
                     setTimeout(() => {
                         button.innerHTML = originalText;
                         button.classList.remove('bg-green-500', 'hover:bg-green-600');
-                        button.classList.add('brand-bg-main', 'hover:bg-blue-600');
+                         if (originalText.includes('Polsek')) {
+                             button.classList.add('bg-red-500', 'hover:bg-red-600');
+                         } else {
+                            button.classList.add('brand-bg-main', 'hover:bg-blue-600');
+                         }
                     }, 2000);
                 });
             });
             
             // Scroll to Top Button
             const toTopButton = document.getElementById('to-top-button');
-            window.addEventListener('scroll', () => {
-                if (window.scrollY > 400) {
-                    toTopButton.classList.remove('hidden');
-                } else {
-                    toTopButton.classList.add('hidden');
-                }
-            });
-
-            toTopButton.addEventListener('click', () => {
-                window.scrollTo({
-                    top: 0,
-                    behavior: 'smooth'
+             if (toTopButton) { 
+                window.addEventListener('scroll', () => {
+                    if (window.scrollY > 400) {
+                        toTopButton.classList.remove('hidden');
+                    } else {
+                        toTopButton.classList.add('hidden');
+                    }
                 });
-            });
+
+                toTopButton.addEventListener('click', () => {
+                    window.scrollTo({
+                        top: 0,
+                        behavior: 'smooth'
+                    });
+                });
+            }
         });
     </script>
 </body>
